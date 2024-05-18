@@ -1,6 +1,11 @@
-<html>
-<body>
+
+{% extends 'catalog/base.html' %}
+{% block content %}
     <p>Hi there!</p>
     <p>It works!</p>
-</body>
-</html>
+    <ul>
+        {% for item in cars %}
+        <li><a href="{% url 'car_detail' id=item.id %}">{{ item.matricula }}</a></li>
+        {% endfor %}
+    </ul>
+    {% endblock %}
