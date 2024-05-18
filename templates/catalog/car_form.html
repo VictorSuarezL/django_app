@@ -7,7 +7,15 @@
 <form class="form-control-sm" action="/car/new/" method="post">
     {% csrf_token %}
     {{ form.as_p }}
-    <button type="submit" class="btn btn-primary">Save</button>
+    <button type="submit" class="btn btn-primary">Guardar</button>
 
 </form>
+
+<h2>Cars</h2>
+Number of cars: {{ cars|length }}
+<ul>
+    {% for item in cars %}
+    <li><a href="{% url 'car_detail' id=item.id %}">{{ item.matricula }}</a></li>
+    {% endfor %}
+</ul>
 {% endblock %}
