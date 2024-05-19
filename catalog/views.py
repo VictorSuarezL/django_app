@@ -1,48 +1,7 @@
-from pyexpat.errors import messages
-from sqlite3 import IntegrityError
-from django.http import HttpResponse
 from django.shortcuts import render, redirect, get_object_or_404
 from catalog.models import Car
 from catalog.forms import CarForm, CarSearchForm, CarEditForm
 
-
-# Create your views here.
-def catalog_list(request):
-    # return HttpResponse("Your are here!")
-    cars = Car.objects.all()
-    return render(request, "catalog/catalog_list.html", {"cars": cars})
-
-
-def edit_car(request, id):
-    car = get_object_or_404(Car, id=id)
-    form = CarForm(instance=car)
-    cars = Car.objects.all()
-    if request.method == "POST":
-        form = CarForm(request.POST, instance=car)
-        if form.is_valid():
-            form.save()
-        return redirect("add_car") 
-    return render(request, "catalog/edit_car.html", {"car": car,
-                                                       "form": form,
-                                                       "cars": cars})
-
-# def edit_car(request, id):
-#     car = get_object_or_404(Car, id=id)
-#     if request.method == 'POST':
-#         form = CarEditForm(request.POST, instance=car)
-#         if form.is_valid():
-#             form.save()
-#             return redirect('search_cars')  # Redirige a la vista de búsqueda después de editar
-#     else:
-#         form = CarEditForm(instance=car)
-#     return render(request, 'catalog/edit_car.html', {'form': form, 'car': car})
-
-def delete_car(request, id):
-    car = get_object_or_404(Car, id=id)
-    if request.method == 'POST':
-        car.delete()
-        return redirect('add_car')  # Redirige a la vista de búsqueda después de eliminar
-    return render(request, 'catalog/confirm_delete.html', {'car': car})
 
 def add_car(request):
     cars = Car.objects.all()
@@ -72,6 +31,30 @@ def add_car(request):
     )
 
 
+def edit_car(request, id):
+    car = get_object_or_404(Car, id=id)
+    form = CarEditForm(instance=car)
+    cars = Car.objects.all()
+    if request.method == "POST":
+        form = CarEditForm(request.POST, instance=car)
+        if form.is_valid():
+            form.save()
+        return redirect("add_car")
+    return render(
+        request, "catalog/edit_car.html", {"car": car, "form": form, "cars": cars}
+    )
+
+
+def delete_car(request, id):
+    car = get_object_or_404(Car, id=id)
+    if request.method == "POST":
+        car.delete()
+        return redirect(
+            "add_car"
+        )  # Redirige a la vista de búsqueda después de eliminar
+    return render(request, "catalog/confirm_delete.html", {"car": car})
+
+
 def search_cars(request):
     search_form = CarSearchForm(request.GET or None)
     cars = Car.objects.all()
@@ -85,3 +68,10 @@ def search_cars(request):
     return render(
         request, "catalog/search_cars.html", {"cars": cars, "search_form": search_form}
     )
+
+
+# Create your views here.
+def catalog_list(request):
+    # return HttpResponse("Your are here!")
+    cars = Car.objects.all()
+    return render(request, "catalog/catalog_list.html", {"cars": cars})
