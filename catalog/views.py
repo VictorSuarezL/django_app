@@ -78,7 +78,7 @@ def delete_car(request, id):
         car.delete()
         return redirect(
             "add_car"
-        )  # Redirige a la vista de búsqueda después de eliminar
+        )  
     return render(request, "catalog/confirm_delete.html", {"car": car})
 
 
@@ -96,8 +96,6 @@ def search_cars(request):
         request, "catalog/search_cars.html", {"cars": cars, "search_form": search_form}
     )
 
-
-# Create your views here.
 def catalog_list(request):
     # return HttpResponse("Your are here!")
     cars = Car.objects.all()
