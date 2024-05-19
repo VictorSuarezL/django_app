@@ -1,5 +1,7 @@
+{% extends 'django_bootstrap5/bootstrap5.html' %}
+{% load django_bootstrap5 %}
+{% block bootstrap5_title %}{% block title %}{% endblock %}{% endblock %}
 
-{% extends 'catalog/base.html' %}
 {% block content %}
     <p>Hi there!</p>
     <p>It works!</p>

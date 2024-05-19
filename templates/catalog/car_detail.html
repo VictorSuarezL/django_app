@@ -1,10 +1,14 @@
-{% extends 'catalog/base.html' %}
-{% block content %}
-<h1>Hello, world!</h1>
-<ul>
-    <li>matricula: {{ car.matricula }}</a></li>
-    <li>Chasis: {{ car.chassis }}</a></li>
-    <li>Documentado: {{ car.documented }}</a></li>
+{% extends 'catalog/car_form.html' %}
+{% load django_bootstrap5 %}
 
-</ul>
+{% block title %}Edit Car{% endblock %}
+
+{% block form %}
+<h1>Edit or Delete Car</h1>
+<form class="form-control-sm" method="post">
+    {% csrf_token %}
+    {% bootstrap_form_errors form type='non_fields' %}
+    {% bootstrap_form form layout='horizontal' size='sm' %}
+    <button type="submit" class="btn btn-danger">Editar</button>
+    <a href="{% url 'delete_car' id=car.id %}" class="btn btn-danger">Eliminar</a>
 {% endblock %}

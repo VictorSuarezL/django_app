@@ -1,0 +1,21 @@
+<!-- archivo: templates/search_cars.html -->
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Búsqueda de Coches</title>
+</head>
+<body>
+    <h1>Búsqueda de Coches</h1>
+    <form method="get">
+        {{ search_form.as_p }}
+        <button type="submit">Buscar</button>
+    </form>
+
+    <h2>Resultados de la búsqueda</h2>
+    <ul>
+        {% for car in cars %}
+            <li>{{ car.matricula }} - {{ car.chassis }} - {{ car.registration_date }} - {{ car.documented }}</li>
+        {% endfor %}
+    </ul>
+</body>
+</html>

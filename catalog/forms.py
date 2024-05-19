@@ -44,4 +44,13 @@ class CarForm(forms.ModelForm):
     #     if matricula == chassis:
     #         raise forms.ValidationError('La matrícula no puede ser igual al chasis')
     #     return cleaned_data
+
+class CarSearchForm(forms.Form):
+    matricula = forms.CharField(max_length=80, required=False)
+    chassis = forms.CharField(max_length=30, required=False)
+    registration_date = forms.DateField(required=False)
     
+class CarEditForm(forms.ModelForm):
+    class Meta:
+        model = Car
+        fields = ['matricula', 'chassis', 'registration_date', 'documented']

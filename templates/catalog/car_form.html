@@ -1,10 +1,11 @@
 {% extends 'catalog/base.html' %}
 {% load django_bootstrap5 %}
 
-{% block title %}Edit Car{% endblock %}
+{% block title %}Search Car{% endblock %}
 
 {% block content %}
-<h1>Edit Car</h1>
+{% block form %}
+<h1>Search Car</h1>
 <form class="form-control-sm" action="/car/new/" method="post" id="form">
     {% csrf_token %}
 
@@ -13,7 +14,7 @@
     {% bootstrap_button button_type="submit" content="OK" %}
 
 </form>
-
+{% endblock %}
 <h2>Cars</h2>
 Number of cars: {{ cars|length }}
 <ul>
@@ -22,6 +23,18 @@ Number of cars: {{ cars|length }}
     {% endfor %}
 </ul>
 
+<h1>Búsqueda de Coches</h1>
+<form method="get">
+    {{ search_form.as_p }}
+    <button type="submit">Buscar</button>
+</form>
+
+<h2>Resultados de la búsqueda</h2>
+<ul>
+    {% for car in cars %}
+    <li>{{ car.matricula }} - {{ car.chassis }} - {{ car.registration_date }} - {{ car.documented }}</li>
+    {% endfor %}
+</ul>
 
 <table id="table_car" class="table table-bordered table-striped my-table">
     <thead>
