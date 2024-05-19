@@ -21,7 +21,7 @@ def edit_car(request, id):
         form = CarForm(request.POST, instance=car)
         if form.is_valid():
             form.save()
-        return redirect("car_new") 
+        return redirect("add_car") 
     return render(request, "catalog/edit_car.html", {"car": car,
                                                        "form": form,
                                                        "cars": cars})
@@ -41,10 +41,10 @@ def delete_car(request, id):
     car = get_object_or_404(Car, id=id)
     if request.method == 'POST':
         car.delete()
-        return redirect('car_new')  # Redirige a la vista de búsqueda después de eliminar
+        return redirect('add_car')  # Redirige a la vista de búsqueda después de eliminar
     return render(request, 'catalog/confirm_delete.html', {'car': car})
 
-def car_new(request):
+def add_car(request):
     cars = Car.objects.all()
     search_form = CarSearchForm(request.GET or None)
     form = CarForm()
@@ -52,7 +52,7 @@ def car_new(request):
         form = CarForm(request.POST)
         if form.is_valid():
             form.save()
-            return redirect("car_new")
+            return redirect("add_car")
     elif search_form.is_valid():
         cars = Car.objects.search(
             matricula=search_form.cleaned_data.get("matricula"),
@@ -63,7 +63,7 @@ def car_new(request):
         form = CarForm()
     return render(
         request,
-        "catalog/car_form.html",
+        "catalog/add_car.html",
         {
             "form": form,
             "cars": cars,
