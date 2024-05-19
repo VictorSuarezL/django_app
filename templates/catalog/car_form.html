@@ -19,7 +19,7 @@
 Number of cars: {{ cars|length }}
 <ul>
     {% for item in cars %}
-    <li><a href="{% url 'car_detail' id=item.id %}">{{ item.matricula }}</a></li>
+    <li><a href="{% url 'edit_car' id=item.id %}">{{ item.matricula }}</a></li>
     {% endfor %}
 </ul>
 
@@ -50,7 +50,7 @@ Number of cars: {{ cars|length }}
     <tbody>
         {% for c in cars %}
         <tr>
-            <td scope="col"><a href="{% url 'car_detail' id=c.id %}">{{ c.matricula }}</a></td>
+            <td scope="col"><a href="{% url 'edit_car' id=c.id %}">{{ c.matricula }}</a></td>
             <td scope="col">{{ c.modelo }}</td>
             <td scope="col">{{ c.brand_id }}</td>
             <td scope="col">{{ c.created_at }}</td>

@@ -7,7 +7,7 @@
     <p>It works!</p>
     <ul>
         {% for item in cars %}
-        <li><a href="{% url 'car_detail' id=item.id %}">{{ item.matricula }}</a></li>
+        <li><a href="{% url 'edit_car' id=item.id %}">{{ item.matricula }}</a></li>
         {% endfor %}
     </ul>
     {% endblock %}

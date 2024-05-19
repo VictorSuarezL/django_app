@@ -13,7 +13,7 @@ def catalog_list(request):
     return render(request, "catalog/catalog_list.html", {"cars": cars})
 
 
-def car_detail(request, id):
+def edit_car(request, id):
     car = get_object_or_404(Car, id=id)
     form = CarForm(instance=car)
     cars = Car.objects.all()
@@ -22,7 +22,7 @@ def car_detail(request, id):
         if form.is_valid():
             form.save()
         return redirect("car_new") 
-    return render(request, "catalog/car_detail.html", {"car": car,
+    return render(request, "catalog/edit_car.html", {"car": car,
                                                        "form": form,
                                                        "cars": cars})
 
