@@ -9,7 +9,6 @@
 <form class="form-control-sm" action="/add/" method="POST" id="form">
     {% csrf_token %}
 
-    {% bootstrap_form_errors form type='non_fields' %}
     {% bootstrap_form form layout='horizontal' size='sm' %}
     {% bootstrap_button button_type="submit" content="OK" %}
 

@@ -19,10 +19,10 @@ class CarManager(models.Manager):
     
 class Car(models.Model):
 
-    matricula = models.CharField(max_length=80, unique=True)
-    chassis = models.CharField(max_length=30)
+    matricula = models.CharField(max_length=80, unique=True, blank=False, null=False)
+    chassis = models.CharField(max_length=30, blank=False, null=False)
     created_at = models.DateTimeField(auto_now_add=True)
-    registration_date = models.DateField(null=True)
+    registration_date = models.DateField(blank=False, null=False)
     documented = models.BooleanField(default=False)
     
     objects = CarManager()
