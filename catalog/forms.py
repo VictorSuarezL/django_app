@@ -53,4 +53,4 @@ class CarSearchForm(forms.Form):
 class CarEditForm(forms.ModelForm):
     class Meta:
         model = Car
-        fields = ['matricula', 'chassis', 'registration_date', 'documented']
+        fields = ['matricula', 'chassis', 'registration_date']

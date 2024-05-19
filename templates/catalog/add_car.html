@@ -6,7 +6,7 @@
 {% block content %}
 {% block form %}
 <h1>Search Car</h1>
-<form class="form-control-sm" action="/add/" method="post" id="form">
+<form class="form-control-sm" action="/add/" method="POST" id="form">
     {% csrf_token %}
 
     {% bootstrap_form_errors form type='non_fields' %}
@@ -14,7 +14,6 @@
     {% bootstrap_button button_type="submit" content="OK" %}
 
 </form>
-{% endblock %}
 <h2>Cars</h2>
 Number of cars: {{ cars|length }}
 <ul>
@@ -35,7 +34,7 @@ Number of cars: {{ cars|length }}
     <li>{{ car.matricula }} - {{ car.chassis }} - {{ car.registration_date }} - {{ car.documented }}</li>
     {% endfor %}
 </ul>
-
+{% endblock %}
 <table id="table_car" class="table table-bordered table-striped my-table">
     <thead>
         <tr>

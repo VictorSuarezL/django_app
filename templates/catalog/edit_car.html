@@ -9,6 +9,28 @@
     {% csrf_token %}
     {% bootstrap_form_errors form type='non_fields' %}
     {% bootstrap_form form layout='horizontal' size='sm' %}
-    <button type="submit" class="btn btn-danger">Editar</button>
-    <a href="{% url 'delete_car' id=car.id %}" class="btn btn-danger">Eliminar</a>
+    <button type="submit" class="btn btn-primary">Editar</button>
+</form>
+<a href="{% url 'delete_car' id=car.id %}" class="btn btn-danger">Eliminar</a>
+
+<h1>Búsqueda de Coches</h1>
+<h2>Cars</h2>
+Number of cars: {{ cars|length }}
+<ul>
+    {% for item in cars %}
+    <li><a href="{% url 'edit_car' id=item.id %}">{{ item.matricula }}</a></li>
+    {% endfor %}
+</ul>
+<h1>Búsqueda de Coches</h1>
+<form method="get">
+    {{ search_form.as_p }}
+    <button type="submit" class="btn btn-secondary">Buscar</button>
+</form>
+
+<h2>Resultados de la búsqueda</h2>
+<ul>
+    {% for car in cars %}
+    <li>{{ car.matricula }} - {{ car.chassis }} - {{ car.registration_date }}</li>
+    {% endfor %}
+</ul>
 {% endblock %}

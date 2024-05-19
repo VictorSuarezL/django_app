@@ -34,14 +34,41 @@ def add_car(request):
 def edit_car(request, id):
     car = get_object_or_404(Car, id=id)
     form = CarEditForm(instance=car)
+    search_form = CarSearchForm(request.GET or None)
     cars = Car.objects.all()
-    if request.method == "POST":
+
+    if request.method == "GET" and search_form.is_valid():
+        cars = Car.objects.search(
+            matricula=search_form.cleaned_data.get("matricula"),
+            chassis=search_form.cleaned_data.get("chassis"),
+            registration_date=search_form.cleaned_data.get("registration_date"),
+        )
+        return render(
+            request,
+            "catalog/edit_car.html",
+            {
+                "car": car,
+                "form": form,
+                "cars": cars,
+                "search_form": search_form,
+            },
+        )
+
+    elif request.method == "POST":
         form = CarEditForm(request.POST, instance=car)
         if form.is_valid():
             form.save()
-        return redirect("add_car")
+            return redirect("add_car")
+
     return render(
-        request, "catalog/edit_car.html", {"car": car, "form": form, "cars": cars}
+        request,
+        "catalog/edit_car.html",
+        {
+            "car": car,
+            "form": form,
+            "cars": cars,
+            "search_form": search_form,
+        },
     )
 
 
