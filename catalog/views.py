@@ -20,6 +20,7 @@ def car_detail(request, id):
 
 def car_new(request):
     cars = Car.objects.all()
+    form = CarForm()
     if request.method == "POST":
         form = CarForm(request.POST)
         if form.is_valid():

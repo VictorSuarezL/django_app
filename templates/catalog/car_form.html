@@ -1,13 +1,16 @@
 {% extends 'catalog/base.html' %}
+{% load django_bootstrap5 %}
 
 {% block title %}Edit Car{% endblock %}
 
 {% block content %}
 <h1>Edit Car</h1>
-<form class="form-control-sm" action="/car/new/" method="post">
+<form class="form-control-sm" action="/car/new/" method="post" id="form">
     {% csrf_token %}
-    {{ form.as_p }}
-    <button type="submit" class="btn btn-primary">Guardar</button>
+
+    {% bootstrap_form_errors form type='non_fields' %}
+    {% bootstrap_form form layout='horizontal' size='sm' %}
+    {% bootstrap_button button_type="submit" content="OK" %}
 
 </form>
 
@@ -18,4 +21,30 @@ Number of cars: {{ cars|length }}
     <li><a href="{% url 'car_detail' id=item.id %}">{{ item.matricula }}</a></li>
     {% endfor %}
 </ul>
+
+
+<table id="table_car" class="table table-bordered table-striped my-table">
+    <thead>
+        <tr>
+            <th scope="col">Matrícula</th>
+            <th scope="col">Modelo</th>
+            <th scope="col">Marca</th>
+            <th scope="col">Fecha de registro</th>
+            <th scope="col">Fecha de matriculación</th>
+            <th scope="col">Documentación</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for c in cars %}
+        <tr>
+            <td scope="col"><a href="{% url 'car_detail' id=c.id %}">{{ c.matricula }}</a></td>
+            <td scope="col">{{ c.modelo }}</td>
+            <td scope="col">{{ c.brand_id }}</td>
+            <td scope="col">{{ c.created_at }}</td>
+            <td scope="col">{{ c.registration_date }}</td>
+            <td scope="col">{{ c.documented }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
 {% endblock %}
