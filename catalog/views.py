@@ -33,6 +33,7 @@ def add_car(request):
 
 def edit_car(request, id):
     car = get_object_or_404(Car, id=id)
+    car.registration_date = car.registration_date.strftime('%Y-%m-%d')
     form = CarEditForm(instance=car)
     search_form = CarSearchForm(request.GET or None)
     cars = Car.objects.all()
