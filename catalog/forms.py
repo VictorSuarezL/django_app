@@ -24,7 +24,7 @@ class CarForm(forms.ModelForm):
         labels = {
             "matricula": "Matrícula",
             "chassis": "Chasis",
-            "registration_date": "Fecha de Registro",
+            "registration_date": "Fecha de Matriculación",
             "documented": "Documentado",
             "brand": "Marca",
             "color": "Color",
@@ -72,7 +72,7 @@ class CarForm(forms.ModelForm):
         elif registration_date >= date.today():
             self.add_error(
                 "registration_date",
-                "La fecha de registro debe ser anterior a la fecha actual.",
+                "La fecha de matriculación debe ser anterior a la fecha actual.",
             )
 
         # Validación de documento
