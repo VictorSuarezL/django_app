@@ -29,3 +29,6 @@ class Car(models.Model):
     brand = models.ForeignKey(Brand, on_delete=models.CASCADE, blank=False, null=False)
     
     objects = CarManager()
+
+    def __str__(self):
+        return f"{self.matricula} - {self.brand}"
