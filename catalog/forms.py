@@ -19,7 +19,7 @@ class CarForm(forms.ModelForm):
             "fuel",
             "transmission",
             "version",
-            "car_model"
+            "car_model",
         ]
         labels = {
             "matricula": "Matrícula",
@@ -87,48 +87,48 @@ class CarForm(forms.ModelForm):
         brand = cleaned_data.get("brand")
         if brand is None:
             self.add_error("brand", "Este campo es obligatorio.")
-        
+
         # Validación de color
         color = cleaned_data.get("color")
         if not color:
             self.add_error("color", "Este campo es obligatorio.")
-        
+
         # Validación de buy_price
         buy_price = cleaned_data.get("buy_price")
         if buy_price is None:
             self.add_error("buy_price", "Este campo es obligatorio.")
         elif buy_price <= 0:
             self.add_error("buy_price", "El precio de compra debe ser mayor a 0.")
-        
+
         # Validación de sale_price
         sale_price = cleaned_data.get("sale_price")
         if sale_price is None:
             self.add_error("sale_price", "Este campo es obligatorio.")
         elif sale_price <= 0:
             self.add_error("sale_price", "El precio de venta debe ser mayor a 0.")
-        
+
         # Validación de km
         km = cleaned_data.get("km")
         if km is None:
             self.add_error("km", "Este campo es obligatorio.")
         elif km <= 0:
             self.add_error("km", "El kilometraje debe ser mayor a 0.")
-        
+
         # Validación de fuel
         fuel = cleaned_data.get("fuel")
         if not fuel:
             self.add_error("fuel", "Este campo es obligatorio.")
-            
+
         # Validación de transmission
         transmission = cleaned_data.get("transmission")
         if not transmission:
             self.add_error("transmission", "Este campo es obligatorio.")
-        
+
         # Validación de version
         version = cleaned_data.get("version")
         if not version:
             self.add_error("version", "Este campo es obligatorio.")
-        
+
         # Validación de car_model
         car_model = cleaned_data.get("car_model")
         if not car_model:
