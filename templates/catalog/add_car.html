@@ -49,7 +49,7 @@ Number of cars: {{ cars|length }}
         {% for c in cars %}
         <tr>
             <td scope="col"><a href="{% url 'edit_car' id=c.id %}">{{ c.matricula }}</a></td>
-            <td scope="col">{{ c.modelo }}</td>
+            <td scope="col">{{ c.car_model }}</td>
             <td scope="col">{{ c.brand }}</td>
             <td scope="col">{{ c.created_at }}</td>
             <td scope="col">{{ c.registration_date }}</td>

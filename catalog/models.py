@@ -1,3 +1,4 @@
+from pyexpat import model
 from django.db import models
 
 class Brand(models.Model):
@@ -27,6 +28,14 @@ class Car(models.Model):
     registration_date = models.DateField(blank=False, null=False)
     documented = models.BooleanField(default=False)
     brand = models.ForeignKey(Brand, on_delete=models.CASCADE, blank=False, null=False)
+    color = models.CharField(max_length=50, blank=True, null=True)
+    buy_price = models.DecimalField(max_digits=10, decimal_places=2, blank=True, null=True)
+    sale_price = models.DecimalField(max_digits=10, decimal_places=2, blank=True, null=True)
+    km = models.DecimalField(max_digits=10, decimal_places=2, blank=True, null=True)
+    fuel = models.CharField(max_length=50, blank=True, null=True)
+    transmission = models.CharField(max_length=50, blank=True, null=True)
+    version = models.CharField(max_length=50, blank=True, null=True)
+    car_model = models.CharField(max_length=50, blank=True, null=True)
     
     objects = CarManager()
 
