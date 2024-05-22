@@ -1,0 +1,33 @@
+{% load django_bootstrap5 %}
+<!doctype html>
+<html lang="es">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  {% block style %}
+  {% bootstrap_css %}
+  {% bootstrap_javascript %}
+  {% load static %}
+  <link rel="stylesheet" type="text/css" href="{% static 'login.css' %}">
+  {% endblock %}
+</head>
+
+<body class="text-center">
+  <form class="form-signin" method="post" action="{% url 'login' %}">
+    <img class="mb-4" src="{% static 'img/logo.svg' %}" width="300">
+    {% csrf_token %}
+    <h1 class="h3 mb-3 fw-normal">Iniciar sesión</h1>
+    <div class="form-floating">
+      {% bootstrap_form form class="form-control" show_label=False %}
+    </div>
+    <div class="form-floating">
+      <button class="w-100 btn btn-lg btn-primary" type="submit">Sign in</button>
+      <input type="hidden" name="next" value="{{ next }}">
+    </div>
+    <p><a href="{% url 'password_reset' %}">¿Olvidó su contraseña?</a></p>
+  </form>
+</body>
+
+</html>

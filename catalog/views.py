@@ -1,8 +1,9 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from catalog.models import Car
 from catalog.forms import CarForm, CarSearchForm, CarEditForm
+from django.contrib.auth.decorators import login_required
 
-
+@login_required
 def add_car(request):
     cars = Car.objects.all()
     search_form = CarSearchForm(request.GET or None)
