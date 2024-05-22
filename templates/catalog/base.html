@@ -8,6 +8,8 @@
     {% block style %}
     {% bootstrap_css %}
     {% bootstrap_javascript %}
+    {% load static %}
+    <link rel="stylesheet" type="text/css" href="{% static 'styles.css' %}">
     {% endblock %}
     <title>
         {% block title %}Home{% endblock %}
@@ -15,7 +17,32 @@
 </head>
 
 <body>
-    {% block content %}{% endblock %} 
+    <nav class="py-2">
+        <div class="container-fluid d-flex flex-wrap justify-content-between">
+            <ul class="nav me-auto">
+                <li class="nav-item">
+                    <a href="#" class="nav-link">LOGONAME</a>
+                </li>
+            </ul>
+            <ul class="nav">
+                <li class="nav-item">
+                    <a href="#" class="nav-link">LOGOUT</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+    <main class="container-fluid">
+        <div class="row">
+            <div class="col-md-5 col-12 left-panel">
+                {% block left %}
+                {% endblock %}
+            </div>
+            <div class="col-md-7 col-12 right-panel">
+                {% block right %}
+                {% endblock %}
+            </div>
+        </div>
+    </main>
     {% block script %}
     {% bootstrap_javascript %}
     {% endblock %}

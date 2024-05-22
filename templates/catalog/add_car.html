@@ -3,8 +3,7 @@
 
 {% block title %}Search Car{% endblock %}
 
-{% block content %}
-{% block form %}
+{% block left %}
 <h1>Search Car</h1>
 <form class="form-control-sm" action="/catalog/add/" method="POST" id="form">
     {% csrf_token %}
@@ -20,7 +19,9 @@ Number of cars: {{ cars|length }}
     <li><a href="{% url 'edit_car' id=item.id %}">{{ item.matricula }}</a></li>
     {% endfor %}
 </ul>
+{% endblock %}
 
+{% block right %}
 <h1>Búsqueda de Coches</h1>
 <form method="get">
     {{ search_form.as_p }}
@@ -33,7 +34,6 @@ Number of cars: {{ cars|length }}
     <li>{{ car.matricula }} - {{ car.chassis }} - {{ car.registration_date }} - {{ car.documented }}</li>
     {% endfor %}
 </ul>
-{% endblock %}
 <table id="table_car" class="table table-bordered table-striped my-table">
     <thead>
         <tr>
