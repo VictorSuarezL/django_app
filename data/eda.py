@@ -20,8 +20,14 @@ import json
 
 # ------ Load data from excel to database ------
 
-df = pd.read_excel("./data/Datos.xlsx", sheet_name="Export_datos").drop_duplicates().iloc[0:10, :]
-print(df.shape)
+# df = pd.read_excel("./data/Datos.xlsx", sheet_name="Export_datos").drop_duplicates().iloc[0:10, :]
+df = pd.read_excel("./data/Datos.xlsx", sheet_name="Export_datos").drop_duplicates()
+
+# df.drop(5469, inplace=True)
+
+df = df.drop(df.index[5469])
+
+print(df)
 
 brands = json.load(open("data/brands_models_cleaned.json"))
 
@@ -31,14 +37,9 @@ for brand in brands:
     # Brand.objects.get_or_create(name=brand)
     # print(brand + ' creado')
 
-print(brand_list)
+# print(brand_list)
 
-df = df[df["Marca"].isin(brand_list)]
-
-# print(df.shape)
-# print(df.columns.to_list())
-
-# # Rename columns
+# Rename columns
 df.rename(
     columns={
         "Matrícula": "matricula",
@@ -57,6 +58,33 @@ df.rename(
     },
     inplace=True,
 )
+
+#------ Filter wrong data ------
+
+# Filter only rows without brand in brand list
+
+# df = df[~df["brand"].isin(brand_list)]
+
+# Change the value where brand is equal to "Infiniti" to "Nissan"
+df.loc[df["brand"] == "Bmw", "brand"] = "BMW"
+df.loc[df["brand"] == "Toyoya", "brand"] = "Toyota"
+df.loc[df["brand"].isin(["Citroen", "Citröen"]) , "brand"] = "Citroën"
+df.loc[(df["brand"].isna()) & (df["car_model"] == "Q30"), "brand"] = "Infiniti"
+df.loc[(df["brand"].isna()) & (df["car_model"] == "Clio"), "brand"] = "Renault"
+
+# df = df[~df["brand"].isin(brand_list)]
+
+# print(df.loc[df["brand"].isna()])
+
+# print(df["brand"].unique().tolist())
+
+""" 
+#------ Filter data ------
+df = df[df["brand"].isin(brand_list)]
+
+# print(df.shape)
+# print(df.columns.to_list())
+
 
 # print(df.columns.to_list())
 
@@ -95,3 +123,4 @@ print(df.shape)
 #     )
     
     
+ """
