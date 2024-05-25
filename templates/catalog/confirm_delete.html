@@ -1,14 +1,21 @@
-{% extends 'catalog/add_car.html' %}
+{% extends 'base.html' %}
 {% load django_bootstrap5 %}
-{% block title %}Delete Car{% endblock %}
+{% block title %}Eliminar Coche{% endblock %}
+
 {% block content %}
-{% block form %}
-<h1>Confirmar eliminación</h1>
-<p>¿Estás seguro de que deseas eliminar el coche con matrícula {{ car.matricula }}?</p>
-<form method="post" class="form-control-sm">
-    {% csrf_token %}
-    <button type="submit">Sí, eliminar</button>
-    <a href="{% url 'search_cars' %}">Cancelar</a>
-</form>
-{% endblock %}
+<div class="container mt-5">
+    <div class="card border-danger">
+        <div class="card-header bg-danger text-white">
+            <h1>Confirmar Eliminación</h1>
+        </div>
+        <div class="card-body">
+            <p class="lead">¿Estás seguro de que deseas eliminar el coche con matrícula <strong>{{ car.matricula }}</strong>?</p>
+            <form method="post" class="d-inline">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-danger">Sí, eliminar</button>
+                <a href="{% url 'add_car' %}" class="btn btn-secondary">Cancelar</a>
+            </form>
+        </div>
+    </div>
+</div>
 {% endblock %}

@@ -23,39 +23,44 @@ Number of cars: {{ cars|length }}
 
 {% block right %}
 <h1>Búsqueda de Coches</h1>
-<form method="get">
-    {{ search_form.as_p }}
-    <button type="submit">Buscar</button>
-</form>
+    <form class="row row-cols-lg-auto g-3 align-items-center form-control-sm" method="get">
+        {% bootstrap_field search_form.matricula layout='inline' size='sm' %}
+        {% bootstrap_field search_form.chassis layout='inline' size='sm' %}
+        {% bootstrap_field search_form.registration_date layout='inline' size='sm' %}
+        {% bootstrap_button button_type="submit" content="Buscar" %}
+        {% bootstrap_button button_type="reset" class="btn btn-secondary" content="Reset" %}
+    </form>
 
-<h2>Resultados de la búsqueda</h2>
-<ul>
-    {% for car in cars %}
-    <li>{{ car.matricula }} - {{ car.chassis }} - {{ car.registration_date }} - {{ car.documented }}</li>
-    {% endfor %}
-</ul>
-<table id="table_car" class="table table-bordered table-striped my-table">
-    <thead>
-        <tr>
-            <th scope="col">Matrícula</th>
-            <th scope="col">Modelo</th>
-            <th scope="col">Marca</th>
-            <th scope="col">Fecha de registro</th>
-            <th scope="col">Fecha de matriculación</th>
-            <th scope="col">Documentación</th>
-        </tr>
-    </thead>
-    <tbody>
-        {% for c in cars %}
-        <tr>
-            <td scope="col"><a href="{% url 'edit_car' id=c.id %}">{{ c.matricula }}</a></td>
-            <td scope="col">{{ c.car_model }}</td>
-            <td scope="col">{{ c.brand }}</td>
-            <td scope="col">{{ c.created_at }}</td>
-            <td scope="col">{{ c.registration_date }}</td>
-            <td scope="col">{{ c.documented }}</td>
-        </tr>
-        {% endfor %}
-    </tbody>
-</table>
+<div class="row">
+    <div class="col">
+        <table id="table_car" class="table table-bordered table-striped my-table">
+            <thead>
+                <tr>
+                    <th scope="col">Matrícula</th>
+                    <th scope="col">Modelo</th>
+                    <th scope="col">Marca</th>
+                    <th scope="col">Fecha de registro</th>
+                    <th scope="col">Fecha de matriculación</th>
+                    <th scope="col">Documentación</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for c in cars %}
+                <tr>
+                    <td scope="col"><a href="{% url 'edit_car' id=c.id %}">{{ c.matricula }}</a></td>
+                    <td scope="col">{{ c.car_model }}</td>
+                    <td scope="col">{{ c.brand }}</td>
+                    <td scope="col">{{ c.created_at }}</td>
+                    <td scope="col">{{ c.registration_date }}</td>
+                    <td scope="col">{{ c.documented }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+</div>
+
+
+
 {% endblock %}
