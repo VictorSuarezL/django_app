@@ -7,6 +7,10 @@ __pycache__/
 *.xlsx
 # C extensions
 *.so
+utils/*.json
+utils/*.png
+utils/*.pdf
+utils/*.yaml
 
 # Distribution / packaging
 .Python
