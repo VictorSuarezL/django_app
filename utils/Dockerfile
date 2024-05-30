@@ -18,8 +18,15 @@ RUN apt-get update && \
     cron \
     && apt-get clean && rm -rf /var/lib/apt/lists/*
 
+# Crear un usuario no root y cambiar a ese usuario
+RUN useradd -m myuser
+USER myuser
+
 # Instala las dependencias de Python
 RUN pip install --no-cache-dir -r requirements.txt
+
+# Volver al usuario root para configurar cron
+USER root
 
 # Añade el archivo crontab al directorio cron.d
 COPY crontab /etc/cron.d/my-cron-job
@@ -33,5 +40,5 @@ RUN crontab /etc/cron.d/my-cron-job
 # Crea el directorio para los logs del cron
 RUN touch /var/log/cron.log
 
-# Ejecuta el comando para iniciar cron y ejecutar el script
+# Ejecuta el comando para iniciar cron y mantener el contenedor en ejecución
 CMD cron && tail -f /var/log/cron.log
