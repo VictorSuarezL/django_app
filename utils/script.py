@@ -10,12 +10,15 @@ from io import BytesIO
 from reportlab.lib.pagesizes import letter
 from reportlab.pdfgen import canvas
 from PIL import Image
+from pytz import timezone
+from pydrive.auth import GoogleAuth
+from pydrive.drive import GoogleDrive
+import os
 
 
 # Read the CSV file from the shared link
 principal = "https://cochesmalaga-my.sharepoint.com/:x:/g/personal/admin_cochesmalaga_onmicrosoft_com/EdxJ2pk55p1FuwZgdGaTIi4BlremkYZUHO88h1HmitehOg?download=1"
 forma_pago="https://cochesmalaga-my.sharepoint.com/:x:/g/personal/admin_cochesmalaga_onmicrosoft_com/Ebj0vhlq-5pDpgkw6Qgv36cBjLCnd3oGL5M4a60gzKY-nA?download=1"
-
 
 def get_dataframe_from_url(url):
 
@@ -123,8 +126,10 @@ save_sales_plot(filtered_df, 'Ventas por Vendedor en el Año Actual', 'ventas_an
 # Crear un PDF con los gráficos y la fecha de creación
 def create_pdf(output_filename, images):
     pdf = canvas.Canvas(output_filename, pagesize=letter)
+
     width, height = letter
-    creation_time = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+    spain_tz = timezone('Europe/Madrid')
+    creation_time = datetime.datetime.now(spain_tz).strftime("%Y-%m-%d %H:%M:%S")
     
     for image in images:
         img = Image.open(image)
@@ -151,161 +156,31 @@ def create_pdf(output_filename, images):
 # Crear el PDF
 create_pdf("ventas_report.pdf", ["ventas_semanal.png", "ventas_mensual.png", "ventas_anual.png"])
 
-#%%
-# Gráfica 1: Deben aparecer todos los vendedores, indicando las ventas que lleva cda uno esa semana
-
-# Filtrar los datos de la semana actual
-week_start = today - datetime.timedelta(days=today.weekday())
-week_end = week_start + datetime.timedelta(days=6)
-
-
-# Contar el número de business days en business_days
-business_days = pd.bdate_range(week_start, today, freq=bday_spain).day
-estimated_sales = len(business_days) * 0.7
-
-week_start = pd.to_datetime(week_start)
-week_end = pd.to_datetime(week_end)
-
-filtered_week = filtered_df.loc[(filtered_df['Fecha venta'] >= week_start) & (filtered_df['Fecha venta'] <= week_end)]
-
-
-# Calcular el número de ventas por vendedor en la semana actual
-sales_per_vendor = filtered_week['Vendedor'].value_counts()
-
-# Crear el gráfico de barras
-plt.figure(figsize=(10,6))
-sns.set_style("whitegrid")
-barplot = sns.barplot(x=sales_per_vendor.index, y=sales_per_vendor.values, color='skyblue')
-
-# Añadir etiquetas y título
-barplot.set_xlabel('Vendedor', fontsize=12)
-barplot.set_ylabel('Número de Ventas', fontsize=12)
-barplot.set_title('Ventas por Vendedor en la Semana Actual', fontsize=14, fontweight='bold')
-
-# Rotar las etiquetas del eje x
-plt.xticks(rotation=45, fontsize=10)
-
-# Añadir una línea horizontal
-barplot.axhline(y=estimated_sales, color='r', linestyle='--', label='Ventas estimadas')
-
-# Asegurar que el gráfico llega a los valores estimados de ventas
-barplot.set_ylim(0, max(max(sales_per_vendor.values), estimated_sales + 1))
-
-# Añadir una leyenda
-barplot.legend()
-
-# Mostrar el gráfico
-plt.show()
-
-# %%
-# Gráfica 2: Deben aparecer todos los vendedores, indicando las ventas que lleva cda uno ese mes
-
-# Filtrar los datos del mes actual
-month_start = today.replace(day=1)
-month_end = month_start + pd.DateOffset(months=1) - pd.DateOffset(days=1)
-
-# Contar el número de business days en business_days
-business_days = pd.bdate_range(month_start, today, freq=bday_spain).day
-estimated_sales = len(business_days) * 0.7
-
-month_start = pd.to_datetime(month_start) 
-month_end = pd.to_datetime(month_end)
-
-filtered_month = filtered_df.loc[(filtered_df['Fecha venta'] >= month_start) & (filtered_df['Fecha venta'] <= month_end)]
-
-# Calcular el número de ventas por vendedor en el mes actual
-sales_per_vendor = filtered_month['Vendedor'].value_counts()
-
-# Crear el gráfico de barras
-plt.figure(figsize=(10,6))
-sns.set_style("whitegrid")
-barplot = sns.barplot(x=sales_per_vendor.index, y=sales_per_vendor.values, color='skyblue')
-
-# Añadir etiquetas y título
-barplot.set_xlabel('Vendedor', fontsize=12)
-barplot.set_ylabel('Número de Ventas', fontsize=12)
-barplot.set_title('Ventas por Vendedor en el Mes Actual', fontsize=14, fontweight='bold')
-
-# Rotar las etiquetas del eje x
-plt.xticks(rotation=45, fontsize=10)
-
-# Añadir una línea horizontal
-barplot.axhline(y=estimated_sales, color='r', linestyle='--', label='Ventas estimadas')
-
-# Asegurar que el gráfico llega a los valores estimados de ventas
-barplot.set_ylim(0, max(max(sales_per_vendor.values), estimated_sales + 1))
-
-# Añadir una leyenda
-barplot.legend()
-
-# Mostrar el gráfico
-plt.show()
-
-# %%
-# Gráfica 3: Deben aparecer todos los vendedores, indicando las ventas que lleva cda uno ese año
-
-# Filtrar los datos del año actual
-year_start = today.replace(month=1, day=1)
-year_end = today.replace(month=12, day=31)
-
-# Contar el número de business days en business_days
-business_days = pd.bdate_range(year_start, today, freq=bday_spain).day
-estimated_sales = len(business_days) * 0.7
-
-year_start = pd.to_datetime(year_start)
-year_end = pd.to_datetime(year_end)
-
-filtered_year = filtered_df.loc[(filtered_df['Fecha venta'] >= year_start) & (filtered_df['Fecha venta'] <= year_end)]
-
-# Calcular el número de ventas por vendedor en el año actual
-sales_per_vendor = filtered_year['Vendedor'].value_counts()
-
-# Crear el gráfico de barras
-plt.figure(figsize=(10,6))
-sns.set_style("whitegrid")
-barplot = sns.barplot(x=sales_per_vendor.index, y=sales_per_vendor.values, color='skyblue')
-
-# Añadir etiquetas y título
-barplot.set_xlabel('Vendedor', fontsize=12)
-barplot.set_ylabel('Número de Ventas', fontsize=12)
-barplot.set_title('Ventas por Vendedor en el Año Actual', fontsize=14, fontweight='bold')
-
-# Rotar las etiquetas del eje x
-plt.xticks(rotation=45, fontsize=10)
-
-# Añadir una línea horizontal
-barplot.axhline(y=estimated_sales, color='r', linestyle='--', label='Ventas estimadas')
-
-# Asegurar que el gráfico llega a los valores estimados de ventas
-barplot.set_ylim(0, max(max(sales_per_vendor.values), estimated_sales + 1))
-
-# Añadir una leyenda
-barplot.legend()
-
-# Mostrar el gráfico
-plt.show()
-
 # %%
 
-# Generar un pdf con los tres gráficos anteriores y que indique cuando se creo y guardarlo en la carpeta de trabajo
-from matplotlib.backends.backend_pdf import PdfPages
 
-# Crear un objeto PdfPages
-pdf_pages = PdfPages('ventas_por_vendedor.pdf')
+# Set working directory to the actual file location
+os.chdir(os.path.dirname(os.path.abspath(__file__)))
 
-# Crear los tres gráficos
-fig1 = plt.figure(figsize=(10,6))
-sns.set_style("whitegrid")
-barplot = sns.barplot(x=sales_per_vendor.index, y=sales_per_vendor.values, color='skyblue')
-barplot.set_xlabel('Vendedor', fontsize=12)
-barplot.set_ylabel('Número de Ventas', fontsize=12)
-barplot.set_title('Ventas por Vendedor en la Semana Actual', fontsize=14, fontweight='bold')
-plt.xticks(rotation=45, fontsize=10)
-barplot.axhline(y=estimated_sales, color='r', linestyle='--', label='Ventas estimadas')
-barplot.set_ylim(0, max(max(sales_per_vendor.values), estimated_sales + 1))
-barplot.legend()
-pdf_pages.savefig(fig1)
+# Autenticar y crear la instancia de GoogleDrive
+gauth = GoogleAuth()
 
-fig2 = plt.figure(figsize=(10,6))
+# Cargar configuración de cliente
+gauth.LoadClientConfigFile('client_secrets.json')
 
+# Usar el método de autenticación basado en línea de comandos
+gauth.CommandLineAuth()
 
+drive = GoogleDrive(gauth)
+
+# Subir el archivo
+file1 = drive.CreateFile({'title': 'ventas_report.pdf'})  # Cambia 'mi_archivo.txt' por el nombre de tu archivo
+file1.SetContentFile('ventas_report.pdf')  # Cambia 'ruta/a/tu_archivo.txt' por la ruta de tu archivo
+file1.Upload()
+
+# Hacer el archivo público
+file1.InsertPermission({
+    'type': 'anyone',
+    'value': 'anyone',
+    'role': 'reader'
+})

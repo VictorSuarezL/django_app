@@ -1,8 +1,6 @@
 from pydrive.auth import GoogleAuth
 from pydrive.drive import GoogleDrive
 import os
-from pydrive.auth import GoogleAuth
-from pydrive.drive import GoogleDrive
 
 # Set working directory to the actual file location
 os.chdir(os.path.dirname(os.path.abspath(__file__)))
