@@ -91,6 +91,11 @@ today = datetime.date.today()
 
 #%%
 
+# Quitar los vendedores cuyo valor sea Álvaro, Martín, Martin y Sandra
+filtered_df = filtered_df.loc[~filtered_df["Vendedor"].isin(["Álvaro", "Martín", "Martin", "Sandra"])]
+
+#%%
+
 # Función para generar y guardar gráficos
 def save_sales_plot(filtered_df, title, filename, date_filter_start, date_filter_end):
     date_filter_start = pd.to_datetime(date_filter_start)
@@ -108,11 +113,23 @@ def save_sales_plot(filtered_df, title, filename, date_filter_start, date_filter
     barplot.set_ylabel('Número de Ventas', fontsize=12)
     barplot.set_title(title, fontsize=14, fontweight='bold')
     plt.xticks(rotation=45, fontsize=10)
+    # Añadir el número de ventas encima de cada barra
+    for index, value in enumerate(sales_per_vendor.values):
+        barplot.text(index, value + 0.1, str(value), ha='center', va='bottom', fontsize=8)
 
     business_days = pd.bdate_range(date_filter_start, today, freq=bday_spain).day
     estimated_sales = len(business_days) * 0.7
+    
+    if sales_per_vendor.empty:
+        max_value = 0
+    else:
+        max_value = max(sales_per_vendor.values)
+    
+    if max_value < estimated_sales:
+        max_value = estimated_sales
+
     barplot.axhline(y=estimated_sales, color='r', linestyle='--', label='Ventas estimadas')
-    barplot.set_ylim(0, max(max(sales_per_vendor.values), estimated_sales + 1))
+    barplot.set_ylim(0, max(max_value, estimated_sales + 1))
     barplot.legend()
 
     plt.savefig(filename)
@@ -129,7 +146,7 @@ def create_pdf(output_filename, images):
 
     width, height = letter
     spain_tz = timezone('Europe/Madrid')
-    creation_time = datetime.datetime.now(spain_tz).strftime("%Y-%m-%d %H:%M:%S")
+    creation_time = datetime.datetime.now(spain_tz).strftime("%H:%M:%S %d/%m/%Y ")
     
     for image in images:
         img = Image.open(image)
@@ -149,7 +166,9 @@ def create_pdf(output_filename, images):
         pdf.drawImage(image, x, y, img_width, img_height)
         
         pdf.setFont("Helvetica", 10)
-        pdf.drawString(30, 750, f"PDF creado el: {creation_time}")
+        pdf.drawString(30, 750, f"Actualizado el: {creation_time}")
+        # Añadir un reglón con el texto "El númer de ventas estimadas de este mes es de X"
+        pdf.drawString(30, 730, f"El número de ventas estimadas de este mes es de {len(pd.bdate_range(today.replace(day=1), today, freq=bday_spain)) * 0.7}") 
         pdf.showPage()
     pdf.save()
 
@@ -173,9 +192,17 @@ gauth.CommandLineAuth()
 
 drive = GoogleDrive(gauth)
 
+# # Borrar el archivo si existe un archivo que se llama igual
+file_list = drive.ListFile({'q': "title='ventas_report.pdf' and trashed=false"}).GetList()
+for file in file_list:
+    file.Delete()
+
 # Subir el archivo
-file1 = drive.CreateFile({'title': 'ventas_report.pdf'})  # Cambia 'mi_archivo.txt' por el nombre de tu archivo
-file1.SetContentFile('ventas_report.pdf')  # Cambia 'ruta/a/tu_archivo.txt' por la ruta de tu archivo
+file1 = drive.CreateFile({
+        'title': 'ventas_report.pdf', 
+        'parents': [{'id': '1AQXOESVT7uJ9GS57oqTIU9H-qNz394fu'}]
+        })  
+file1.SetContentFile('ventas_report.pdf')  
 file1.Upload()
 
 # Hacer el archivo público
@@ -184,3 +211,11 @@ file1.InsertPermission({
     'value': 'anyone',
     'role': 'reader'
 })
+
+# Borrar los archivos locales
+os.remove('ventas_report.pdf')
+os.remove('ventas_semanal.png')
+os.remove('ventas_mensual.png')
+os.remove('ventas_anual.png')
+
+print('Archivo subido y compartido con éxito')

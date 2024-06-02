@@ -1,5 +1,5 @@
 # Usa una imagen base oficial de Python con las versiones necesarias de Python y pip
-FROM python:3.9-slim
+FROM python:3.11.3-slim-buster
 
 # Establece el directorio de trabajo en /app
 WORKDIR /app
@@ -10,23 +10,13 @@ COPY . /app
 # Instala las dependencias del sistema
 RUN apt-get update && \
     apt-get install -y --no-install-recommends \
-    gcc \
-    libpq-dev \
-    python3-dev \
-    libjpeg-dev \
-    zlib1g-dev \
     cron \
     && apt-get clean && rm -rf /var/lib/apt/lists/*
 
-# Crear un usuario no root y cambiar a ese usuario
-RUN useradd -m myuser
-USER myuser
-
-# Instala las dependencias de Python
+# install dependencies
+RUN pip install --upgrade pip
+COPY requirements.txt ./app
 RUN pip install --no-cache-dir -r requirements.txt
-
-# Volver al usuario root para configurar cron
-USER root
 
 # Añade el archivo crontab al directorio cron.d
 COPY crontab /etc/cron.d/my-cron-job
