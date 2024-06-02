@@ -140,36 +140,34 @@ save_sales_plot(filtered_df, 'Ventas por Vendedor en la Semana Actual', 'ventas_
 save_sales_plot(filtered_df, 'Ventas por Vendedor en el Mes Actual', 'ventas_mensual.png', today.replace(day=1), today)
 save_sales_plot(filtered_df, 'Ventas por Vendedor en el Año Actual', 'ventas_anual.png', today.replace(month=1, day=1), today)
 
-# Crear un PDF con los gráficos y la fecha de creación
-def create_pdf(output_filename, images):
-    pdf = canvas.Canvas(output_filename, pagesize=letter)
+from reportlab.lib.pagesizes import landscape
 
-    width, height = letter
+def create_pdf(output_filename, images):
+    pdf = canvas.Canvas(output_filename, pagesize=landscape(letter))
+
+    width, height = landscape(letter)
     spain_tz = timezone('Europe/Madrid')
     creation_time = datetime.datetime.now(spain_tz).strftime("%H:%M:%S %d/%m/%Y ")
+
+    img_width = width / len(images)
     
-    for image in images:
+    for i, image in enumerate(images):
         img = Image.open(image)
-        img_width, img_height = img.size
-        aspect = img_height / float(img_width)
-        
+        img_height = img.size[1] * (img_width / img.size[0])  # maintain aspect ratio
+
         # Ajustar las dimensiones para mantener la relación de aspecto
-        if img_width > width or img_height > height:
-            img_width = width
-            img_height = width * aspect
-            if img_height > height:
-                img_height = height
-                img_width = height / aspect
-        
-        x = (width - img_width) / 2
+        if img_height > height:
+            img_height = height
+            img_width = height * (img.size[0] / img.size[1])  # maintain aspect ratio
+
+        x = i * img_width
         y = (height - img_height) / 2
         pdf.drawImage(image, x, y, img_width, img_height)
-        
-        pdf.setFont("Helvetica", 10)
-        pdf.drawString(30, 750, f"Actualizado el: {creation_time}")
-        # Añadir un reglón con el texto "El númer de ventas estimadas de este mes es de X"
-        pdf.drawString(30, 730, f"El número de ventas estimadas de este mes es de {len(pd.bdate_range(today.replace(day=1), today, freq=bday_spain)) * 0.7}") 
-        pdf.showPage()
+
+    pdf.setFont("Helvetica", 10)
+    pdf.drawString(30, height - 30, f"Actualizado el: {creation_time}")
+    pdf.drawString(30, height - 50, f"El número de ventas estimadas de este mes es de {len(pd.bdate_range(today.replace(day=1), today, freq=bday_spain)) * 0.7}") 
+    pdf.showPage()
     pdf.save()
 
 # Crear el PDF
