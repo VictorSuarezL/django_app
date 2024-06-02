@@ -140,12 +140,12 @@ save_sales_plot(filtered_df, 'Ventas por Vendedor en la Semana Actual', 'ventas_
 save_sales_plot(filtered_df, 'Ventas por Vendedor en el Mes Actual', 'ventas_mensual.png', today.replace(day=1), today)
 save_sales_plot(filtered_df, 'Ventas por Vendedor en el Año Actual', 'ventas_anual.png', today.replace(month=1, day=1), today)
 
-from reportlab.lib.pagesizes import landscape
+from reportlab.lib.pagesizes import A4, landscape
 
 def create_pdf(output_filename, images):
-    pdf = canvas.Canvas(output_filename, pagesize=landscape(letter))
+    pdf = canvas.Canvas(output_filename, pagesize=landscape(A4))
 
-    width, height = landscape(letter)
+    width, height = landscape(A4)
     spain_tz = timezone('Europe/Madrid')
     creation_time = datetime.datetime.now(spain_tz).strftime("%H:%M:%S %d/%m/%Y ")
 
@@ -190,17 +190,16 @@ gauth.CommandLineAuth()
 
 drive = GoogleDrive(gauth)
 
-# # Borrar el archivo si existe un archivo que se llama igual
-file_list = drive.ListFile({'q': "title='ventas_report.pdf' and trashed=false"}).GetList()
-for file in file_list:
-    file.Delete()
+# ID del archivo existente
+file_id = '1vhxlh3KaDQGRjl9eOnN-i4vBIMEum3Zx'
 
-# Subir el archivo
-file1 = drive.CreateFile({
-        'title': 'ventas_report.pdf', 
-        'parents': [{'id': '1AQXOESVT7uJ9GS57oqTIU9H-qNz394fu'}]
-        })  
-file1.SetContentFile('ventas_report.pdf')  
+# Crear un objeto de archivo con el ID del archivo existente
+file1 = drive.CreateFile({'id': file_id})
+
+# Establecer el contenido del archivo
+file1.SetContentFile('ventas_report.pdf')
+
+# Subir el archivo, esto sobrescribirá el archivo existente
 file1.Upload()
 
 # Hacer el archivo público
@@ -217,3 +216,5 @@ os.remove('ventas_mensual.png')
 os.remove('ventas_anual.png')
 
 print('Archivo subido y compartido con éxito')
+
+# %%
