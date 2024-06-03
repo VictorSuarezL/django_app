@@ -7,6 +7,7 @@ from pandas.tseries.holiday import AbstractHolidayCalendar, Holiday
 from pandas.tseries.offsets import CustomBusinessDay
 import requests
 from io import BytesIO
+import numpy as np
 from reportlab.lib.pagesizes import letter
 from reportlab.pdfgen import canvas
 from PIL import Image
@@ -14,6 +15,8 @@ from pytz import timezone
 from pydrive.auth import GoogleAuth
 from pydrive.drive import GoogleDrive
 import os
+
+import sales
 
 
 # Read the CSV file from the shared link
@@ -63,38 +66,17 @@ filtered_df = merged_df.loc[(merged_df['Destino'] == 'Venta') & (merged_df['En s
 filtered_df['Calcu'] = pd.to_datetime(filtered_df['Fecha venta']).dt.month
 filtered_df['Calcu2'] = pd.to_datetime(filtered_df['Fecha venta']).dt.year
 
-
 #%%
-# Los vendedores deben hacer 0.7 ventas por día laborale. Indicar en la parte superior de las gráficas cuántas
-# ventas deberían llevar (en función del día del mes en el estemos) 
-# ! ¿Los sábados cuentan como día laborables?
-
-# Calcular el número de día laborable del mes actual
-class SpanishHolidays(AbstractHolidayCalendar):
-    rules = [
-        Holiday('New Year', month=1, day=1),
-        Holiday('Epiphany', month=1, day=6),
-        # Holiday('Good Friday', month=1, day=1, offset=[Easter(), Day(-2)]),
-        Holiday('Labour Day', month=5, day=1),
-        Holiday('Assumption of Mary', month=8, day=15),
-        Holiday('National Day', month=10, day=12),
-        Holiday('All Saints Day', month=11, day=1),
-        Holiday('Constitution Day', month=12, day=6),
-        Holiday('Immaculate Conception', month=12, day=8),
-        Holiday('Christmas Day', month=12, day=25)
-    ]
-
-# Create custom business day with Spanish holidays
-bday_spain = CustomBusinessDay(calendar=SpanishHolidays())
 
 today = datetime.date.today()
 
-#%%
-
 # Quitar los vendedores cuyo valor sea Álvaro, Martín, Martin y Sandra
-filtered_df = filtered_df.loc[~filtered_df["Vendedor"].isin(["Álvaro", "Martín", "Martin", "Sandra"])]
-
-#%%
+filtered_df = filtered_df.loc[~filtered_df["Vendedor"].isin(["Álvaro", 
+                                                             "Martín", 
+                                                             "Martin", 
+                                                             "David López",
+                                                             "Rocío",
+                                                             "Sandra"])]
 
 # Función para generar y guardar gráficos
 def save_sales_plot(filtered_df, title, filename, date_filter_start, date_filter_end):
@@ -104,34 +86,49 @@ def save_sales_plot(filtered_df, title, filename, date_filter_start, date_filter
         (filtered_df['Fecha venta'] >= date_filter_start) & 
         (filtered_df['Fecha venta'] <= date_filter_end)
     ]
-    sales_per_vendor = filtered_data['Vendedor'].value_counts()
+    sales_per_vendor = filtered_data['Vendedor'].value_counts().sort_index()
+    
+    # Si sales_per_vendor está vacío, crear un DataFrame vacío con los vendedores como índice y sus ventas en 0
+    if sales_per_vendor.empty:
+        sales_per_vendor = pd.Series(0, index=filtered_df['Vendedor'].unique()).sort_index()
+        sales_per_vendor = sales_per_vendor.loc[~sales_per_vendor.index.isin(["David López", "Rocío", "Sandra"])]
 
-    plt.figure(figsize=(10, 6))
+    plt.figure(figsize=(4, 3))
     sns.set_style("whitegrid")
-    barplot = sns.barplot(x=sales_per_vendor.index, y=sales_per_vendor.values, color='skyblue')
-    barplot.set_xlabel('Vendedor', fontsize=12)
-    barplot.set_ylabel('Número de Ventas', fontsize=12)
-    barplot.set_title(title, fontsize=14, fontweight='bold')
+    barplot = sns.barplot(x=sales_per_vendor.index, y=sales_per_vendor.values, color='skyblue', width=0.5)
+    barplot.set_xlabel('Vendedor')
+    barplot.set_ylabel('Número de Ventas')
+    barplot.set_title(title)
     plt.xticks(rotation=45, fontsize=10)
     # Añadir el número de ventas encima de cada barra
-    for index, value in enumerate(sales_per_vendor.values):
-        barplot.text(index, value + 0.1, str(value), ha='center', va='bottom', fontsize=8)
 
-    business_days = pd.bdate_range(date_filter_start, today, freq=bday_spain).day
-    estimated_sales = len(business_days) * 0.7
+    business_days = np.busday_count(date_filter_start.strftime('%Y-%m-%d'), date_filter_end.strftime('%Y-%m-%d'))
+    estimated_sales = business_days * 0.8
     
+    if estimated_sales != 0:
+        
+        for index, value in enumerate(sales_per_vendor.values):
+            barplot.text(index, value + 0.1, str(value), ha='center', va='bottom')
+            
+    if filename == 'ventas_semanal.png':
+        ventas = 4
+    elif filename == 'ventas_mensual.png':
+        ventas = 17
+    elif filename == 'ventas_anual.png':
+        ventas = 204
+        
     if sales_per_vendor.empty:
-        max_value = 0
+        max_value = max(estimated_sales, ventas)
     else:
-        max_value = max(sales_per_vendor.values)
-    
-    if max_value < estimated_sales:
-        max_value = estimated_sales
+        max_value = max(sales_per_vendor.values.max(), estimated_sales, ventas)    
 
-    barplot.axhline(y=estimated_sales, color='r', linestyle='--', label='Ventas estimadas')
-    barplot.set_ylim(0, max(max_value, estimated_sales + 1))
+    if estimated_sales != 0:
+        barplot.axhline(y=estimated_sales, color='r', linestyle='--', label='Ventas por día laborable')
+    barplot.axhline(y=ventas, color='g', linestyle='-', label='Meta de ventas')
+    barplot.set_ylim(0, max_value + 2)
     barplot.legend()
-
+    
+    plt.tight_layout()
     plt.savefig(filename)
     plt.close()
 
@@ -140,6 +137,7 @@ save_sales_plot(filtered_df, 'Ventas por Vendedor en la Semana Actual', 'ventas_
 save_sales_plot(filtered_df, 'Ventas por Vendedor en el Mes Actual', 'ventas_mensual.png', today.replace(day=1), today)
 save_sales_plot(filtered_df, 'Ventas por Vendedor en el Año Actual', 'ventas_anual.png', today.replace(month=1, day=1), today)
 
+# %%
 from reportlab.lib.pagesizes import A4, landscape
 
 def create_pdf(output_filename, images):
@@ -166,7 +164,7 @@ def create_pdf(output_filename, images):
 
     pdf.setFont("Helvetica", 10)
     pdf.drawString(30, height - 30, f"Actualizado el: {creation_time}")
-    pdf.drawString(30, height - 50, f"El número de ventas estimadas de este mes es de {len(pd.bdate_range(today.replace(day=1), today, freq=bday_spain)) * 0.7}") 
+    pdf.drawString(30, height - 50, f"El número de ventas estimadas de este mes es de {np.busday_count(today.replace(day=1), today) * 0.8}")
     pdf.showPage()
     pdf.save()
 
