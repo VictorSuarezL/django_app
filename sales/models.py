@@ -45,8 +45,8 @@ class Client(models.Model):
 
 
 class Sale(models.Model):
-    car = models.ForeignKey(Car, on_delete=models.CASCADE)
-    client = models.ForeignKey(Client, on_delete=models.CASCADE)
+    # car = models.ForeignKey(Car, on_delete=models.CASCADE)
+    # client = models.ForeignKey(Client, on_delete=models.CASCADE)
     guarantee = models.BooleanField(default=False)
     equipment_a = models.CharField(max_length=100, blank=True, null=True)
     equipment_b = models.CharField(max_length=100, blank=True, null=True)
