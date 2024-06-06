@@ -29,58 +29,58 @@ df = df.drop(df.index[5469])
 
 print(df)
 
-brands = json.load(open("data/brands_models_cleaned.json"))
+marcas = json.load(open("data/marcas_models_cleaned.json"))
 
-brand_list = []
-for brand in brands:
-    brand_list.append(brand)
-    # Brand.objects.get_or_create(name=brand)
-    # print(brand + ' creado')
+marca_list = []
+for marca in marcas:
+    marca_list.append(marca)
+    # Brand.objects.get_or_create(name=marca)
+    # print(marca + ' creado')
 
-# print(brand_list)
+# print(marca_list)
 
 # Rename columns
 df.rename(
     columns={
         "Matrícula": "matricula",
-        "Chasis": "chassis",
-        "Fecha matriculación": "registration_date",
+        "Chasis": "chasis",
+        "Fecha matriculación": "f_matriculacion",
         # "Documentado": "documented",
-        "Marca": "brand",
+        "Marca": "marca",
         "Color": "color",
         "Precio contado": "buy_price",
         "Precio financiado": "sale_price",
         "Kilómetros": "km",
-        "Combustible": "fuel",
-        "Cambio": "transmission",
+        "Combustible": "combustible",
+        "Cambio": "cambio",
         "Versión": "version",
-        "Modelo": "car_model",
+        "Modelo": "modelo",
     },
     inplace=True,
 )
 
 #------ Filter wrong data ------
 
-# Filter only rows without brand in brand list
+# Filter only rows without marca in marca list
 
-# df = df[~df["brand"].isin(brand_list)]
+# df = df[~df["marca"].isin(marca_list)]
 
-# Change the value where brand is equal to "Infiniti" to "Nissan"
-df.loc[df["brand"] == "Bmw", "brand"] = "BMW"
-df.loc[df["brand"] == "Toyoya", "brand"] = "Toyota"
-df.loc[df["brand"].isin(["Citroen", "Citröen"]) , "brand"] = "Citroën"
-df.loc[(df["brand"].isna()) & (df["car_model"] == "Q30"), "brand"] = "Infiniti"
-df.loc[(df["brand"].isna()) & (df["car_model"] == "Clio"), "brand"] = "Renault"
+# Change the value where marca is equal to "Infiniti" to "Nissan"
+df.loc[df["marca"] == "Bmw", "marca"] = "BMW"
+df.loc[df["marca"] == "Toyoya", "marca"] = "Toyota"
+df.loc[df["marca"].isin(["Citroen", "Citröen"]) , "marca"] = "Citroën"
+df.loc[(df["marca"].isna()) & (df["modelo"] == "Q30"), "marca"] = "Infiniti"
+df.loc[(df["marca"].isna()) & (df["modelo"] == "Clio"), "marca"] = "Renault"
 
-# df = df[~df["brand"].isin(brand_list)]
+# df = df[~df["marca"].isin(marca_list)]
 
-# print(df.loc[df["brand"].isna()])
+# print(df.loc[df["marca"].isna()])
 
-# print(df["brand"].unique().tolist())
+# print(df["marca"].unique().tolist())
 
 """ 
 #------ Filter data ------
-df = df[df["brand"].isin(brand_list)]
+df = df[df["marca"].isin(marca_list)]
 
 # print(df.shape)
 # print(df.columns.to_list())
@@ -89,7 +89,7 @@ df = df[df["brand"].isin(brand_list)]
 # print(df.columns.to_list())
 
 # Select columns
-df = df.loc[:, ["matricula", "chassis", "registration_date", "brand", "color", "buy_price", "sale_price", "km", "fuel", "transmission", "version", "car_model"]]
+df = df.loc[:, ["matricula", "chasis", "f_matriculacion", "marca", "color", "buy_price", "sale_price", "km", "combustible", "cambio", "version", "modelo"]]
 
 # Create new column documented with default value True
 df["documented"] = True
@@ -104,22 +104,22 @@ print(df.shape)
 #     print(index)
 
 # for index, row in df.iterrows():
-#     brand = row["brand"]
-#     brand = Brand.objects.get(name=brand)
+#     marca = row["marca"]
+#     marca = Brand.objects.get(name=marca)
 #     Car.objects.get_or_create(
 #         matricula=row["matricula"],
-#         chassis=row["chassis"],
-#         registration_date=row["registration_date"],
+#         chasis=row["chasis"],
+#         f_matriculacion=row["f_matriculacion"],
 #         documented=row["documented"],
-#         brand=brand,
+#         marca=marca,
 #         color=row["color"],
 #         buy_price=row["buy_price"],
 #         sale_price=row["sale_price"],
 #         km=row["km"],
-#         fuel=row["fuel"],
-#         transmission=row["transmission"],
+#         combustible=row["combustible"],
+#         cambio=row["cambio"],
 #         version=row["version"],
-#         car_model=row["car_model"],
+#         modelo=row["modelo"],
 #     )
     
     

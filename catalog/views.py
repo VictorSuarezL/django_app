@@ -16,8 +16,8 @@ def add_car(request):
     elif search_form.is_valid():
         cars = Car.objects.search(
             matricula=search_form.cleaned_data.get("matricula"),
-            chassis=search_form.cleaned_data.get("chassis"),
-            registration_date=search_form.cleaned_data.get("registration_date"),
+            chasis=search_form.cleaned_data.get("chasis"),
+            f_matriculacion=search_form.cleaned_data.get("f_matriculacion"),
         )
     else:
         form = CarForm()
@@ -34,7 +34,7 @@ def add_car(request):
 
 def edit_car(request, id):
     car = get_object_or_404(Car, id=id)
-    car.registration_date = car.registration_date.strftime('%Y-%m-%d')
+    car.f_matriculacion = car.f_matriculacion.strftime('%Y-%m-%d')
     form = CarEditForm(instance=car)
     search_form = CarSearchForm(request.GET or None)
     cars = Car.objects.all()
@@ -42,8 +42,8 @@ def edit_car(request, id):
     if request.method == "GET" and search_form.is_valid():
         cars = Car.objects.search(
             matricula=search_form.cleaned_data.get("matricula"),
-            chassis=search_form.cleaned_data.get("chassis"),
-            registration_date=search_form.cleaned_data.get("registration_date"),
+            chasis=search_form.cleaned_data.get("chasis"),
+            f_matriculacion=search_form.cleaned_data.get("f_matriculacion"),
         )
         return render(
             request,
@@ -91,8 +91,8 @@ def search_cars(request):
 
         cars = Car.objects.search(
             matricula=search_form.cleaned_data.get("matricula"),
-            chassis=search_form.cleaned_data.get("chassis"),
-            registration_date=search_form.cleaned_data.get("registration_date"),
+            chasis=search_form.cleaned_data.get("chasis"),
+            f_matriculacion=search_form.cleaned_data.get("f_matriculacion"),
         )
     return render(
         request, "catalog/search_cars.html", {"cars": cars, "search_form": search_form}

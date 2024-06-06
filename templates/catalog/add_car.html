@@ -25,8 +25,8 @@ Number of cars: {{ cars|length }}
 <h1>Búsqueda de Coches</h1>
     <form class="row row-cols-lg-auto g-3 align-items-center form-control-sm" method="get">
         {% bootstrap_field search_form.matricula layout='inline' size='sm' %}
-        {% bootstrap_field search_form.chassis layout='inline' size='sm' %}
-        {% bootstrap_field search_form.registration_date layout='inline' size='sm' %}
+        {% bootstrap_field search_form.chasis layout='inline' size='sm' %}
+        {% bootstrap_field search_form.f_matriculacion layout='inline' size='sm' %}
         {% bootstrap_button button_type="submit" content="Buscar" %}
         {% bootstrap_button button_type="reset" class="btn btn-secondary" content="Reset" %}
     </form>
@@ -48,10 +48,10 @@ Number of cars: {{ cars|length }}
                 {% for c in cars %}
                 <tr>
                     <td scope="col"><a href="{% url 'edit_car' id=c.id %}">{{ c.matricula }}</a></td>
-                    <td scope="col">{{ c.car_model }}</td>
-                    <td scope="col">{{ c.brand }}</td>
+                    <td scope="col">{{ c.modelo }}</td>
+                    <td scope="col">{{ c.marca }}</td>
                     <td scope="col">{{ c.created_at }}</td>
-                    <td scope="col">{{ c.registration_date }}</td>
+                    <td scope="col">{{ c.f_matriculacion }}</td>
                     <td scope="col">{{ c.documented }}</td>
                 </tr>
                 {% endfor %}

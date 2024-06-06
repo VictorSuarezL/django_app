@@ -3,12 +3,9 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns
 import datetime
-from pandas.tseries.holiday import AbstractHolidayCalendar, Holiday
-from pandas.tseries.offsets import CustomBusinessDay
 import requests
 from io import BytesIO
 import numpy as np
-from reportlab.lib.pagesizes import letter
 from reportlab.pdfgen import canvas
 from PIL import Image
 from pytz import timezone
@@ -16,8 +13,10 @@ from pydrive.auth import GoogleAuth
 from pydrive.drive import GoogleDrive
 import os
 
-import sales
+# Modifcar el directorio de trabajo al directorio real del archivo
+os.chdir(os.path.dirname(os.path.abspath(__file__)))
 
+# print(os.getcwd())
 
 # Read the CSV file from the shared link
 principal = "https://cochesmalaga-my.sharepoint.com/:x:/g/personal/admin_cochesmalaga_onmicrosoft_com/EdxJ2pk55p1FuwZgdGaTIi4BlremkYZUHO88h1HmitehOg?download=1"
@@ -208,10 +207,10 @@ file1.InsertPermission({
 })
 
 # Borrar los archivos locales
-os.remove('ventas_report.pdf')
-os.remove('ventas_semanal.png')
-os.remove('ventas_mensual.png')
-os.remove('ventas_anual.png')
+# os.remove('/root/app/ventas_report.pdf')
+# os.remove('ventas_semanal.png')
+# os.remove('ventas_mensual.png')
+# os.remove('ventas_anual.png')
 
 print('Archivo subido y compartido con éxito')
 

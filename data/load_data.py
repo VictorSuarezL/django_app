@@ -4,12 +4,12 @@ import json
 from catalog.models import Brand, Car 
 import pandas as pd
 
-# with open('data/brands_models.json', 'r') as file:
-#     brands = json.load(file)
+# with open('data/marcas_models.json', 'r') as file:
+#     marcas = json.load(file)
 
-# for brand_name in brands:
-#     Brand.objects.get_or_create(name=brand_name)
-#     print(brand_name + ' creado')
+# for marca_name in marcas:
+#     Brand.objects.get_or_create(name=marca_name)
+#     print(marca_name + ' creado')
     
 def load_data_json(json_name, model):
     with open(f'data/{json_name}.json', 'r') as file:
@@ -21,50 +21,55 @@ def load_data_json(json_name, model):
 
     return data
 
-brands = load_data_json('brands_models_cleaned', Brand)
+marcas = load_data_json('brands_models_cleaned', Brand)
 
 df = pd.read_excel("./data/Datos.xlsx", sheet_name="Export_datos").drop_duplicates().iloc[0:10, :]
 
-df.rename(
+with open('column_dict.json', 'r') as f:
+    nuevos_nombres = json.load(f)
+
+df.rename(columns=nuevos_nombres, inplace=True)
+
+""" df.rename(
     columns={
         "Matrícula": "matricula",
-        "Chasis": "chassis",
-        "Fecha matriculación": "registration_date",
+        "Chasis": "chasis",
+        "Fecha matriculación": "f_matriculacion",
         # "Documentado": "documented",
-        "Marca": "brand",
+        "Marca": "marca",
         "Color": "color",
         "Precio contado": "buy_price",
         "Precio financiado": "sale_price",
         "Kilómetros": "km",
-        "Combustible": "fuel",
-        "Cambio": "transmission",
+        "Combustible": "combustible",
+        "Cambio": "cambio",
         "Versión": "version",
-        "Modelo": "car_model",
+        "Modelo": "modelo",
     },
     inplace=True,
-)
+) """
 
-df = df.loc[:, ["matricula", "chassis", "registration_date", "brand", "color", "buy_price", "sale_price", "km", "fuel", "transmission", "version", "car_model"]]
+df = df.loc[:, ["matricula", "chasis", "f_matriculacion", "marca", "color", "buy_price", "sale_price", "km", "combustible", "cambio", "version", "modelo"]]
 df["documented"] = True
 df = df.dropna()
 
 for index, row in df.iterrows():
     print(index)
-    if row["brand"] in brands:
-        brand = row["brand"]
-        brand = Brand.objects.get(name=brand)
+    if row["marca"] in marcas:
+        marca = row["marca"]
+        marca = Brand.objects.get(name=marca)
         Car.objects.get_or_create(
             matricula=row["matricula"],
-            chassis=row["chassis"],
-            registration_date=row["registration_date"],
+            chasis=row["chasis"],
+            f_matriculacion=row["f_matriculacion"],
             documented=row["documented"],
-            brand=brand,
+            marca=marca,
             color=row["color"],
             buy_price=row["buy_price"],
             sale_price=row["sale_price"],
             km=row["km"],
-            fuel=row["fuel"],
-            transmission=row["transmission"],
+            combustible=row["combustible"],
+            cambio=row["cambio"],
             version=row["version"],
-            car_model=row["car_model"],
+            modelo=row["modelo"],
         )

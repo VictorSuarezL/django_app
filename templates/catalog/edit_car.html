@@ -32,7 +32,7 @@ Number of cars: {{ cars|length }}
 <h2>Resultados de la búsqueda</h2>
 <ul>
     {% for car in cars %}
-    <li>{{ car.matricula }} - {{ car.chassis }} - {{ car.registration_date }}</li>
+    <li>{{ car.matricula }} - {{ car.chasis }} - {{ car.f_matriculacion }}</li>
     {% endfor %}
 </ul>
 {% endblock %}

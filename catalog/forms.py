@@ -8,48 +8,48 @@ class CarForm(forms.ModelForm):
         model = Car
         fields = [
             "matricula",
-            "chassis",
-            "registration_date",
+            "chasis",
+            "f_matriculacion",
             "documented",
-            "brand",
+            "marca",
             "color",
-            "buy_price",
-            "sale_price",
+            # "buy_price",
+            # "sale_price",
             "km",
-            "fuel",
-            "transmission",
+            "combustible",
+            "cambio",
             "version",
-            "car_model",
+            "modelo",
         ]
         labels = {
             "matricula": "Matrícula",
-            "chassis": "Chasis",
-            "registration_date": "Fecha de Matriculación",
+            "chasis": "Chasis",
+            "f_matriculacion": "Fecha de Matriculación",
             "documented": "Documentado",
-            "brand": "Marca",
+            "marca": "Marca",
             "color": "Color",
-            "buy_price": "Precio de Compra",
-            "sale_price": "Precio de Venta",
+            # "buy_price": "Precio de Compra",
+            # "sale_price": "Precio de Venta",
             "km": "Kilometraje",
-            "fuel": "Combustible",
-            "transmission": "Transmisión",
+            "combustible": "Combustible",
+            "cambio": "Transmisión",
             "version": "Versión",
-            "car_model": "Modelo",
+            "modelo": "Modelo",
         }
         widgets = {
             "matricula": forms.TextInput(),
-            "chassis": forms.TextInput(),
-            "registration_date": forms.DateInput(attrs={"type": "date"}),
+            "chasis": forms.TextInput(),
+            "f_matriculacion": forms.DateInput(attrs={"type": "date"}),
             "documented": forms.CheckboxInput(),
-            "brand": forms.Select(),
+            "marca": forms.Select(),
             "color": forms.TextInput(),
-            "buy_price": forms.NumberInput(),
-            "sale_price": forms.NumberInput(),
+            # "buy_price": forms.NumberInput(),
+            # "sale_price": forms.NumberInput(),
             "km": forms.NumberInput(),
-            "fuel": forms.TextInput(),
-            "transmission": forms.TextInput(),
+            "combustible": forms.TextInput(),
+            "cambio": forms.TextInput(),
             "version": forms.TextInput(),
-            "car_model": forms.TextInput(),
+            "modelo": forms.TextInput(),
         }
 
     def clean(self):
@@ -60,18 +60,18 @@ class CarForm(forms.ModelForm):
         if not matricula:
             self.add_error("matricula", "Este campo es obligatorio.")
 
-        # Validación de chassis
-        chassis = cleaned_data.get("chassis")
-        if not chassis:
-            self.add_error("chassis", "Este campo es obligatorio.")
+        # Validación de chasis
+        chasis = cleaned_data.get("chasis")
+        if not chasis:
+            self.add_error("chasis", "Este campo es obligatorio.")
 
-        # Validación de registration_date
-        registration_date = cleaned_data.get("registration_date")
-        if registration_date is None:
-            self.add_error("registration_date", "Este campo es obligatorio.")
-        elif registration_date >= date.today():
+        # Validación de f_matriculacion
+        f_matriculacion = cleaned_data.get("f_matriculacion")
+        if f_matriculacion is None:
+            self.add_error("f_matriculacion", "Este campo es obligatorio.")
+        elif f_matriculacion >= date.today():
             self.add_error(
-                "registration_date",
+                "f_matriculacion",
                 "La fecha de matriculación debe ser anterior a la fecha actual.",
             )
 
@@ -84,28 +84,28 @@ class CarForm(forms.ModelForm):
             )
 
         # Validación de marca
-        brand = cleaned_data.get("brand")
-        if brand is None:
-            self.add_error("brand", "Este campo es obligatorio.")
+        marca = cleaned_data.get("marca")
+        if marca is None:
+            self.add_error("marca", "Este campo es obligatorio.")
 
         # Validación de color
         color = cleaned_data.get("color")
         if not color:
             self.add_error("color", "Este campo es obligatorio.")
 
-        # Validación de buy_price
-        buy_price = cleaned_data.get("buy_price")
-        if buy_price is None:
-            self.add_error("buy_price", "Este campo es obligatorio.")
-        elif buy_price <= 0:
-            self.add_error("buy_price", "El precio de compra debe ser mayor a 0.")
+        # # Validación de buy_price
+        # buy_price = cleaned_data.get("buy_price")
+        # if buy_price is None:
+        #     self.add_error("buy_price", "Este campo es obligatorio.")
+        # elif buy_price <= 0:
+        #     self.add_error("buy_price", "El precio de compra debe ser mayor a 0.")
 
-        # Validación de sale_price
-        sale_price = cleaned_data.get("sale_price")
-        if sale_price is None:
-            self.add_error("sale_price", "Este campo es obligatorio.")
-        elif sale_price <= 0:
-            self.add_error("sale_price", "El precio de venta debe ser mayor a 0.")
+        # # Validación de sale_price
+        # sale_price = cleaned_data.get("sale_price")
+        # if sale_price is None:
+        #     self.add_error("sale_price", "Este campo es obligatorio.")
+        # elif sale_price <= 0:
+        #     self.add_error("sale_price", "El precio de venta debe ser mayor a 0.")
 
         # Validación de km
         km = cleaned_data.get("km")
@@ -114,31 +114,31 @@ class CarForm(forms.ModelForm):
         elif km <= 0:
             self.add_error("km", "El kilometraje debe ser mayor a 0.")
 
-        # Validación de fuel
-        fuel = cleaned_data.get("fuel")
-        if not fuel:
-            self.add_error("fuel", "Este campo es obligatorio.")
+        # Validación de combustible
+        combustible = cleaned_data.get("combustible")
+        if not combustible:
+            self.add_error("combustible", "Este campo es obligatorio.")
 
-        # Validación de transmission
-        transmission = cleaned_data.get("transmission")
-        if not transmission:
-            self.add_error("transmission", "Este campo es obligatorio.")
+        # Validación de cambio
+        cambio = cleaned_data.get("cambio")
+        if not cambio:
+            self.add_error("cambio", "Este campo es obligatorio.")
 
         # Validación de version
         version = cleaned_data.get("version")
         if not version:
             self.add_error("version", "Este campo es obligatorio.")
 
-        # Validación de car_model
-        car_model = cleaned_data.get("car_model")
-        if not car_model:
-            self.add_error("car_model", "Este campo es obligatorio.")
+        # Validación de modelo
+        modelo = cleaned_data.get("modelo")
+        if not modelo:
+            self.add_error("modelo", "Este campo es obligatorio.")
 
 
 class CarSearchForm(forms.Form):
     matricula = forms.CharField(max_length=80, required=False)
-    chassis = forms.CharField(max_length=30, required=False)
-    registration_date = forms.DateField(required=False)
+    chasis = forms.CharField(max_length=30, required=False)
+    f_matriculacion = forms.DateField(required=False)
 
 
 class CarEditForm(CarForm):
