@@ -4,3 +4,4 @@ django-bootstrap5==24.2
 psycopg2-binary==2.9.9
 sqlparse==0.5.0
 pandas==2.2.2
+django-autocomplete-light==3.11.0

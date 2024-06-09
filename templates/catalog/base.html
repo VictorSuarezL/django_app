@@ -25,12 +25,12 @@
                 </li>
             </ul>
             <ul class="nav">
-                    <li class="nav-item">
-                        <form method="post" action="{% url 'logout' %}">
-                            {% csrf_token %}
-                            <button type="submit" class="nav-link">LOGOUT</button>
-                        </form>
-                    </li>
+                <li class="nav-item">
+                    <form method="post" action="{% url 'logout' %}">
+                        {% csrf_token %}
+                        <button type="submit" class="nav-link">LOGOUT</button>
+                    </form>
+                </li>
             </ul>
         </div>
     </nav>
@@ -48,6 +48,10 @@
     </main>
     {% block script %}
     {% bootstrap_javascript %}
+    {% endblock %}
+    {% block footer %}
+    <script type="text/javascript" src="{% static 'admin/js/vendor/jquery/jquery.js' %}"></script>
+    {{ form.media }}
     {% endblock %}
 </body>
 

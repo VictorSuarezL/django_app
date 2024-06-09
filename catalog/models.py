@@ -1,5 +1,7 @@
 # from pyexpat import model
 from django.db import models
+from django.contrib.contenttypes.fields import GenericForeignKey
+from django.contrib.contenttypes.models import ContentType
 
 class Brand(models.Model):
     name = models.CharField(max_length=100, unique=True, blank=False, null=False)

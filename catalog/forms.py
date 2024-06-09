@@ -1,7 +1,7 @@
-from django import forms
 from .models import Car
 from datetime import date
-
+from dal import autocomplete
+from django import forms
 
 class CarForm(forms.ModelForm):
     class Meta:
@@ -41,7 +41,7 @@ class CarForm(forms.ModelForm):
             "chasis": forms.TextInput(),
             "f_matriculacion": forms.DateInput(attrs={"type": "date"}),
             "documented": forms.CheckboxInput(),
-            "marca": forms.Select(),
+            'marca': autocomplete.ModelSelect2(attrs={"data-theme": "bootstrap-5", "style": "width: 100%;"}, url='brand-autocomplete'),
             "color": forms.TextInput(),
             # "buy_price": forms.NumberInput(),
             # "sale_price": forms.NumberInput(),

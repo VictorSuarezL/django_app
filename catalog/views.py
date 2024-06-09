@@ -1,7 +1,21 @@
 from django.shortcuts import render, redirect, get_object_or_404
-from catalog.models import Car
+from catalog.models import Car, Brand
 from catalog.forms import CarForm, CarSearchForm, CarEditForm
 from django.contrib.auth.decorators import login_required
+
+from dal import autocomplete
+
+class BrandAutocomplete(autocomplete.Select2QuerySetView):
+    def get_queryset(self):
+        if not self.request.user.is_authenticated:
+            return Brand.objects.none()
+
+        qs = Brand.objects.all().order_by('name')
+
+        if self.q:
+            qs = qs.filter(name__istartswith=self.q)
+
+        return qs
 
 @login_required
 def add_car(request):

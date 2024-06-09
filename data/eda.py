@@ -1,7 +1,7 @@
-# from catalog.models import Car, Brand
-from enum import unique
+
 import pandas as pd
 import json
+import os
 
 # from catalog.models import Brand
 
@@ -37,8 +37,13 @@ json_str = json.dumps(json_dict, ensure_ascii=False, indent=4)
 
 print(json_str)
 
-with open("data/json/unique_values.json", "w", encoding='utf-8') as f:
-    f.write(json_str)
+output_file = "data/json/unique_values.json"
+
+if not os.path.exists(output_file):
+    with open(output_file, "w", encoding='utf-8') as f:
+        f.write(json_str)
+else:
+    print(f"File {output_file} already exists. Skipping write operation.")
     
 
 
