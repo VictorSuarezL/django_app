@@ -4,7 +4,7 @@
 
 {% block left %}
 <h1>{% if car_id %}Edit Sale{% else %}Add Sale{% endif %}</h1>
-<form method="post">
+<form method="post" class="row row-cols-2 form-control-sm">
     {% csrf_token %}
     {% bootstrap_form form %}
     {% if car_id %}
@@ -24,7 +24,7 @@ Number of cars: {{ cars|length }}
 
 {% block right %}
 <h1>Búsqueda de Coches</h1>
-    <form class="row row-cols-lg-auto g-3 align-items-center form-control-sm" method="get">
+    <form class="row row-cols-sm-auto g-3 align-items-center form-control-sm" method="get">
         {% bootstrap_field search_form.matricula layout='inline' size='sm' %}
         {% bootstrap_field search_form.chasis layout='inline' size='sm' %}
         {% bootstrap_field search_form.f_matriculacion layout='inline' size='sm' %}

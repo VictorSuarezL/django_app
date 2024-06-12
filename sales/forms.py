@@ -13,9 +13,25 @@ class CustomDateInput(forms.DateInput):
             return ''
         return value.strftime('%Y-%m-%d')
 
+def get_choice_list():
+    return [
+        "Álvaro",
+        "Carlos M",
+        "David",
+        "Javier",
+        "Joel",
+        "Juan",
+        "Juan José",
+        "Martín",
+        "Miguel",
+        "Salvador",
+        "Sandra"
+        ]
+
 class SalesForm(forms.ModelForm):
-    vendedor = forms.CharField(
-        widget=autocomplete.ListSelect2(attrs={"data-theme": "bootstrap-5", "style": "width: 100%;"}, 
+    vendedor = autocomplete.Select2ListChoiceField(
+        choice_list=get_choice_list,
+        widget=autocomplete.ListSelect2(attrs={"data-theme": "bootstrap-5"}, 
                                         url='custom-list-autocomplete'),
         required=False
     )
@@ -28,4 +44,7 @@ class SalesForm(forms.ModelForm):
     class Meta:
         model = Sales
         fields = "__all__"
+        widgets = {
+            'car': forms.HiddenInput(),
+        }
         
