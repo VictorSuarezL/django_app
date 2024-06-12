@@ -16,14 +16,6 @@ class Municipality(models.Model):
 
     def __str__(self):
         return self.name
-    
-class Saler(models.Model):
-    name = models.CharField(max_length=100, unique=True, blank=False, null=False)
-        
-    def __str__(self):
-        return self.name
-    
-
 
 class Client(models.Model):
     nombre_cliente = models.CharField(max_length=100, blank=False, null=False)
@@ -59,15 +51,17 @@ class Client(models.Model):
 
 
 class Sales(models.Model):
-    car = models.ForeignKey('catalog.Car', on_delete=models.CASCADE)
-    vendedor = models.ForeignKey(Saler, max_length=100, blank=True, null=True, on_delete=models.CASCADE)
+    car = models.OneToOneField('catalog.Car', on_delete=models.CASCADE)
+    # client = models.ForeignKey(Client, on_delete=models.CASCADE)
+    # vendedor = models.ForeignKey(Saler, max_length=100, blank=True, null=True, on_delete=models.CASCADE)
+    vendedor = models.CharField(max_length=100, blank=True, null=True)
     f_venta = models.DateField(blank=True, null=True)
     t_iva = models.CharField(max_length=50, blank=True, null=True)
     garantia = models.CharField(max_length=50, blank=True, null=True)   
     garantia_fab_km = models.DecimalField(max_digits=10, decimal_places=2, blank=True, null=True)
     garantia_fab_fecha = models.DateField(blank=True, null=True)
     garantia_ext_num = models.CharField(max_length=50, blank=True, null=True)
-    doble_precio = models.BooleanField(default=False)
+    doble_precio = models.BooleanField(default=False, blank=True, null=True)
     p_contado = models.DecimalField(max_digits=10, decimal_places=2, blank=True, null=True)
     p_financiado = models.DecimalField(max_digits=10, decimal_places=2, blank=True, null=True)
     p_venta = models.DecimalField(max_digits=10, decimal_places=2, blank=True, null=True)

@@ -1,0 +1,64 @@
+{% extends 'sales/base.html' %}
+{% load django_bootstrap5 %}
+{% load static %}
+
+{% block left %}
+<h1>{% if car_id %}Edit Sale{% else %}Add Sale{% endif %}</h1>
+<form method="post">
+    {% csrf_token %}
+    {% bootstrap_form form %}
+    {% if car_id %}
+        <button type="submit" class="btn btn-warning">Edit</button>
+    {% else %}
+        <button type="submit" class="btn btn-primary">Add</button>
+    {% endif %}
+</form>
+<h2>Cars</h2>
+Number of cars: {{ cars|length }}
+<ul>
+    {% for item in cars %}
+    <li><a href="{% url 'sale_detail' car_id=item.id %}">{{ item.matricula }}</a></li>
+    {% endfor %}
+</ul>
+{% endblock %}
+
+{% block right %}
+<h1>Búsqueda de Coches</h1>
+    <form class="row row-cols-lg-auto g-3 align-items-center form-control-sm" method="get">
+        {% bootstrap_field search_form.matricula layout='inline' size='sm' %}
+        {% bootstrap_field search_form.chasis layout='inline' size='sm' %}
+        {% bootstrap_field search_form.f_matriculacion layout='inline' size='sm' %}
+        {% bootstrap_button button_type="submit" content="Buscar" %}
+        {% bootstrap_button button_type="reset" class="btn btn-secondary" content="Reset" %}
+    </form>
+
+<div class="row">
+    <div class="col">
+        <table id="table_car" class="table table-bordered table-striped my-table">
+            <thead>
+                <tr>
+                    <th scope="col">Matrícula</th>
+                    <th scope="col">Modelo</th>
+                    <th scope="col">Marca</th>
+                    <th scope="col">Fecha de registro</th>
+                    <th scope="col">Fecha de matriculación</th>
+                    <th scope="col">Documentación</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for c in cars %}
+                <tr>
+                    <td scope="col"><a href="{% url 'sale_detail' car_id=c.id %}">{{ c.matricula }}</a></td>
+                    <td scope="col">{{ c.modelo }}</td>
+                    <td scope="col">{{ c.marca }}</td>
+                    <td scope="col">{{ c.created_at }}</td>
+                    <td scope="col">{{ c.f_matriculacion }}</td>
+                    <td scope="col">{{ c.documented }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+</div>
+{% endblock %}

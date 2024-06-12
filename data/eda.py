@@ -27,23 +27,24 @@ df.rename(columns=nuevos_nombres, inplace=True)
 
 # df = df.drop(df.index[5469])
 
-json_dict = {}
-for column in ["provincia", "localidad", "vendedor"]:
+def create_unique_values_json(df, column):
+    json_dict = {}
     df[column] = df[column].astype(str)
     unique_values = sorted(df[column].unique().tolist())
     json_dict[column] = unique_values
 
-json_str = json.dumps(json_dict, ensure_ascii=False, indent=4)
+    json_str = json.dumps(json_dict, ensure_ascii=False, indent=4)
+    output_file = f"data/json/{column}.json"
+    if not os.path.exists(output_file):
+        with open(output_file, "w", encoding='utf-8') as f:
+            f.write(json_str)
+    else:
+        print(f"File {output_file} already exists. Skipping write operation.")
 
-print(json_str)
-
-output_file = "data/json/unique_values.json"
-
-if not os.path.exists(output_file):
-    with open(output_file, "w", encoding='utf-8') as f:
-        f.write(json_str)
-else:
-    print(f"File {output_file} already exists. Skipping write operation.")
+# Example usage
+# create_unique_values_json(df, "provincia", "data/json/provincia.json")
+# create_unique_values_json(df, "localidad", "data/json/localidad.json")
+create_unique_values_json(df, "vendedor")
     
 
 
