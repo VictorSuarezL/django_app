@@ -83,6 +83,20 @@ nav .nav a:hover {
     padding-left: 0;
     padding-right: 0;
 }
+.custom-input-width .form-control {
+    max-width: 200px; /* Ajusta este valor según tus necesidades */
+    width: 100%;
+}
+
+.custom-label {
+    flex: 0 0 30%; /* Ajusta este valor según tus necesidades */
+    max-width: 30%;
+}
+
+.custom-input {
+    flex: 0 0 70%; /* Ajusta este valor según tus necesidades */
+    max-width: 70%;
+}
 /* 
 @media (max-width: 768px) {
     .left-panel {

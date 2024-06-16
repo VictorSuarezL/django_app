@@ -75,6 +75,26 @@ class Sales(models.Model):
     observaciones = models.TextField(blank=True, null=True)
     fecha_entrega = models.DateField(blank=True, null=True)
     hora_entrega = models.TimeField(blank=True, null=True)
+    cobrado = models.TextField(blank=True, null=True)
+    equip_1 = models.TextField(blank=True, null=True)
+    equip_2 = models.TextField(blank=True, null=True)
+    equip_3 = models.TextField(blank=True, null=True)
+    equip_4 = models.TextField(blank=True, null=True)
+    equip_5 = models.TextField(blank=True, null=True)
+    equip_6 = models.TextField(blank=True, null=True)
+    equip_7 = models.TextField(blank=True, null=True)
+    equip_8 = models.TextField(blank=True, null=True)
+    equip_9 = models.TextField(blank=True, null=True)
+    equip_10 = models.TextField(blank=True, null=True)
+    equip_11 = models.TextField(blank=True, null=True)
+    equip_12 = models.TextField(blank=True, null=True)
+    equip_13 = models.TextField(blank=True, null=True)
+    equip_14 = models.TextField(blank=True, null=True)
+    equip_15 = models.TextField(blank=True, null=True)
+    equip_16 = models.TextField(blank=True, null=True)
+    equip_17 = models.TextField(blank=True, null=True)
+    equip_18 = models.TextField(blank=True, null=True)
+    
     
     def __str__(self):
         return f"{self.car} - {self.vendedor}"
