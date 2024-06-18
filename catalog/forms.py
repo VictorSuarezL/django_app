@@ -139,6 +139,7 @@ class CarSearchForm(forms.Form):
     matricula = forms.CharField(max_length=80, required=False)
     chasis = forms.CharField(max_length=30, required=False)
     f_matriculacion = forms.DateField(required=False)
+    stock = forms.BooleanField(required=False)
 
 
 class CarEditForm(CarForm):

@@ -10,7 +10,7 @@ class Brand(models.Model):
         return self.name
 
 class CarManager(models.Manager):
-    def search(self, matricula=None, chasis=None, f_matriculacion=None, documented=None):
+    def search(self, matricula=None, chasis=None, f_matriculacion=None, documented=None, stock=None):
         queryset = self.get_queryset()
 
         if matricula:
@@ -19,6 +19,8 @@ class CarManager(models.Manager):
             queryset = queryset.filter(chasis__icontains=chasis)
         if f_matriculacion:
             queryset = queryset.filter(f_matriculacion=f_matriculacion)
+        if stock:
+            queryset = queryset.filter(stock=stock)
         
         return queryset
     

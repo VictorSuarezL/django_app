@@ -1,0 +1,76 @@
+{% load django_bootstrap5 %}
+<!doctype html>
+<html lang="es">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    {% block style %}
+    {% bootstrap_css %}
+    {% bootstrap_javascript %}
+    {% load static %}
+    <link rel="stylesheet" type="text/css" href="{% static 'styles.css' %}">
+    {% endblock %}
+    <title>
+        {% block title %}Home{% endblock %}
+    </title>
+</head>
+
+<body>
+    <nav class="py-2">
+        <div class="container-fluid d-flex flex-wrap justify-content-between">
+            <ul class="nav me-auto">
+                <li class="nav-item">
+                    <a href="{% url 'sales' %}" class="nav-link">Ventas</a>
+                </li>
+                <li class="nav-item">
+                    <a href="{% url 'add_car' %}" class="nav-link">Administración</a>
+                </li>
+                <li class="nav-item">
+                    <a href="#" class="nav-link">Cuentas</a>
+                </li>
+                <li class="nav-item">
+                    <a href="#" class="nav-link">Recepción</a>
+                </li>
+                <li class="nav-item">
+                    <a href="#" class="nav-link">Orden de Trabajo</a>
+                </li>
+                <li class="nav-item">
+                    <a href="#" class="nav-link">Recambios</a>
+                </li>
+                <li class="nav-item">
+                    <a href="#" class="nav-link">Mecánica</a>
+                </li>
+            </ul>
+            <ul class="nav">
+                <li class="nav-item">
+                    <form method="post" action="{% url 'logout' %}">
+                        {% csrf_token %}
+                        <button type="submit" class="nav-link">LOGOUT</button>
+                    </form>
+                </li>
+            </ul>
+        </div>
+    </nav>
+    <main class="container-fluid">
+        <div class="row">
+            <div class="col-md-5 col-12 left-panel">
+                {% block left %}
+                {% endblock %}
+            </div>
+            <div class="col-md-7 col-12 right-panel">
+                {% block right %}
+                {% endblock %}
+            </div>
+        </div>
+    </main>
+    {% block script %}
+    {% bootstrap_javascript %}
+    {% endblock %}
+    {% block footer %}
+    <script type="text/javascript" src="{% static 'admin/js/vendor/jquery/jquery.js' %}"></script>
+    {{ form.media }}
+    {% endblock %}
+</body>
+
+</html>

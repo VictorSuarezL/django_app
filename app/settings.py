@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     'django_bootstrap5',
     'catalog.apps.CatalogConfig',
     'sales.apps.SalesConfig',
+    'reception.apps.ReceptionConfig',
 ]
 
 MIDDLEWARE = [

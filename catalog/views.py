@@ -29,7 +29,7 @@ def add_car(request):
             return redirect("add_car")
     elif search_form.is_valid():
         cars = Car.objects.search(
-            matricula__icontains=search_form.cleaned_data.get("matricula"),
+            matricula=search_form.cleaned_data.get("matricula"),
             chasis=search_form.cleaned_data.get("chasis"),
             f_matriculacion=search_form.cleaned_data.get("f_matriculacion"),
         )
