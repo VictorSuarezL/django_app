@@ -107,6 +107,8 @@ def search_cars(request):
             matricula=search_form.cleaned_data.get("matricula"),
             chasis=search_form.cleaned_data.get("chasis"),
             f_matriculacion=search_form.cleaned_data.get("f_matriculacion"),
+            stock=search_form.cleaned_data.get("stock")
+            
         )
     return render(
         request, "catalog/search_cars.html", {"cars": cars, "search_form": search_form}

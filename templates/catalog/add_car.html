@@ -29,8 +29,9 @@ Number of cars: {{ cars|length }}
         {% bootstrap_field search_form.chasis layout='inline' size='sm' %}
         {% bootstrap_field search_form.f_matriculacion layout='inline' size='sm' %}
         {% bootstrap_field search_form.stock layout='inline' size='sm' %}
-        <button type="submit" class="btn btn-secondary">Buscar</button>
-        <!-- {% bootstrap_button button_type="reset" class="btn btn-secondary" content="Reset" %} -->
+        {% bootstrap_button button_type="submit" content="Buscar" %}
+        <!-- <button type="submit" class="btn btn-secondary">Buscar</button> -->
+        {% bootstrap_button button_type="reset" class="btn btn-secondary" content="Reset" %}
     </form>
 
 <div class="row">

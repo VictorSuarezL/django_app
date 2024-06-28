@@ -2,16 +2,17 @@
 from dal import autocomplete
 from django import forms
 from .models import Sales
+from utils.forms import CustomDateInput
 
-class CustomDateInput(forms.DateInput):
-    input_type = 'date'
+# class CustomDateInput(forms.DateInput):
+#     input_type = 'date'
 
-    def format_value(self, value):
-        if isinstance(value, str):
-            return value
-        if value is None:
-            return ''
-        return value.strftime('%Y-%m-%d')
+#     def format_value(self, value):
+#         if isinstance(value, str):
+#             return value
+#         if value is None:
+#             return ''
+#         return value.strftime('%Y-%m-%d')
 
 def get_choice_list():
     return [
@@ -44,7 +45,7 @@ class SalesForm(forms.ModelForm):
     class Meta:
         model = Sales
         fields = "__all__"
-        widgets = {
-            'car': forms.HiddenInput(),
-        }
+        # widgets = {
+        #     'car': forms.HiddenInput(),
+        # }
         

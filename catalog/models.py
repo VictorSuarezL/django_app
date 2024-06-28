@@ -3,14 +3,23 @@ from django.db import models
 from django.contrib.contenttypes.fields import GenericForeignKey
 from django.contrib.contenttypes.models import ContentType
 
+
 class Brand(models.Model):
     name = models.CharField(max_length=100, unique=True, blank=False, null=False)
 
     def __str__(self):
         return self.name
 
+
 class CarManager(models.Manager):
-    def search(self, matricula=None, chasis=None, f_matriculacion=None, documented=None, stock=None):
+    def search(
+        self,
+        matricula=None,
+        chasis=None,
+        f_matriculacion=None,
+        documented=None,
+        stock=None,
+    ):
         queryset = self.get_queryset()
 
         if matricula:
@@ -21,9 +30,10 @@ class CarManager(models.Manager):
             queryset = queryset.filter(f_matriculacion=f_matriculacion)
         if stock:
             queryset = queryset.filter(stock=stock)
-        
+
         return queryset
-    
+
+
 class Car(models.Model):
 
     created_at = models.DateTimeField(auto_now_add=True)
@@ -51,13 +61,19 @@ class Car(models.Model):
     largo = models.DecimalField(max_digits=10, decimal_places=2, blank=True, null=True)
     ancho = models.DecimalField(max_digits=10, decimal_places=2, blank=True, null=True)
     alto = models.DecimalField(max_digits=10, decimal_places=2, blank=True, null=True)
-    consumo_medio = models.DecimalField(max_digits=10, decimal_places=2, blank=True, null=True)
-    maletero = models.DecimalField(max_digits=10, decimal_places=2, blank=True, null=True)
+    consumo_medio = models.DecimalField(
+        max_digits=10, decimal_places=2, blank=True, null=True
+    )
+    maletero = models.DecimalField(
+        max_digits=10, decimal_places=2, blank=True, null=True
+    )
     c_contaminacion = models.CharField(max_length=50, blank=True, null=True)
-    client = models.ForeignKey('sales.Client', on_delete=models.SET_NULL, blank=True, null=True)
+    client = models.ForeignKey(
+        "sales.Client", on_delete=models.SET_NULL, blank=True, null=True
+    )
     documented = models.BooleanField(default=False)
     # sale = models.ForeignKey('sales.Sales', on_delete=models.SET_NULL, blank=True, null=True)
-    
+
     objects = CarManager()
 
     def __str__(self):

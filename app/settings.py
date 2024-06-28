@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     'catalog.apps.CatalogConfig',
     'sales.apps.SalesConfig',
     'reception.apps.ReceptionConfig',
+    'workorder.apps.WorkorderConfig',
 ]
 
 MIDDLEWARE = [

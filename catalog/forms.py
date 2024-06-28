@@ -139,8 +139,19 @@ class CarSearchForm(forms.Form):
     matricula = forms.CharField(max_length=80, required=False)
     chasis = forms.CharField(max_length=30, required=False)
     f_matriculacion = forms.DateField(required=False)
-    stock = forms.BooleanField(required=False)
-
+    stock = forms.ChoiceField(
+        choices=[('True', 'Stock'), ('False', 'Vendidos'), ('', 'Todos')],
+        required=False,
+        widget=forms.Select(attrs={"class": "form-control-sm"}),
+    )
+    def clean_stock(self):
+        stock = self.cleaned_data.get('stock')
+        if stock == 'True':
+            return True
+        elif stock == 'False':
+            return False
+        else:
+            return None
 
 class CarEditForm(CarForm):
     pass

@@ -1,4 +1,5 @@
 
+
 from django.shortcuts import render, get_object_or_404
 from django.http import HttpResponse
 from django.views import View
@@ -40,11 +41,12 @@ class SalesView(View):
         
         if car_id:
             car = get_object_or_404(Car, id=car_id)
-            sale = Sales.objects.filter(car=car).first()
-            if sale:
+            sale = Sales.objects.get_or_create(car=car)
+            try:
+                sale = car.sales
                 sales_form = SalesForm(instance=sale)
-            else:
-                sales_form = SalesForm(initial={'car': car})
+            except Sales.DoesNotExist:
+                sales_form = SalesForm()
         else:
             sales_form = SalesForm()
 
@@ -55,7 +57,7 @@ class SalesView(View):
             'car_id': car_id
         })
 
-    def post(self, request, car_id=None):
+    def post(self, request, car_id):
         search_form = CarSearchForm(request.GET or None)
         
         if search_form.is_valid():
@@ -68,26 +70,18 @@ class SalesView(View):
         else:
             cars = Car.objects.all()
             
-        if car_id:
-            car = get_object_or_404(Car, id=car_id)
-            sale = Sales.objects.filter(car=car).first()
-            if sale:
-                sales_form = SalesForm(request.POST, instance=sale)
-            else:
-                sales_form = SalesForm(request.POST)
-                if sales_form.is_valid():
-                    sale = sales_form.save(commit=False)
-                    sale.car = car
-                    if sale.f_venta:
-                        sale.car.stock = False
-                    sale.save()
-        else:
-            sales_form = SalesForm(request.POST)
-            if sales_form.is_valid():
-                sales_form.save()
-
-        # if sales_form.is_valid():
-        #     sales_form.save()
+        car = get_object_or_404(Car, id=car_id)
+        sales_form = SalesForm(request.POST, instance=car)
+        try:
+            sale = car.sales
+            sales_form = SalesForm(request.POST, instance=sale)
+        except Sales.DoesNotExist:
+            sales_form = SalesForm(request.POST)        
+        
+        if sales_form.is_valid():
+            sale = sales_form.save(commit=False)
+            sale.car = car
+            sale.save()
 
         return render(request, 'sales/sales_form.html', {
             'search_form': search_form,

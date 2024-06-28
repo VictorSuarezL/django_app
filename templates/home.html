@@ -21,19 +21,19 @@
         <div class="container-fluid d-flex flex-wrap justify-content-between">
             <ul class="nav me-auto">
                 <li class="nav-item">
+                    <a href="{% url 'add_car' %}" class="nav-link">Administración</a>
+                </li>
+                <li class="nav-item">
                     <a href="{% url 'sales' %}" class="nav-link">Ventas</a>
                 </li>
                 <li class="nav-item">
-                    <a href="{% url 'add_car' %}" class="nav-link">Administración</a>
+                    <a href="{% url 'reception' %}" class="nav-link">Recepción</a>
                 </li>
                 <li class="nav-item">
                     <a href="#" class="nav-link">Cuentas</a>
                 </li>
                 <li class="nav-item">
-                    <a href="#" class="nav-link">Recepción</a>
-                </li>
-                <li class="nav-item">
-                    <a href="#" class="nav-link">Orden de Trabajo</a>
+                    <a href="{% url 'workorder' %}" class="nav-link">Orden de Trabajo</a>
                 </li>
                 <li class="nav-item">
                     <a href="#" class="nav-link">Recambios</a>

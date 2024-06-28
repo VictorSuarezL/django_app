@@ -10,4 +10,5 @@ class ReceptionForm(forms.ModelForm):
         widgets = {
             'f_reception': CustomDateInput(),
             'f_delivery': CustomDateInput(),
+            'car': forms.HiddenInput(),
         }

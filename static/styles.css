@@ -97,6 +97,24 @@ nav .nav a:hover {
     flex: 0 0 70%; /* Ajusta este valor según tus necesidades */
     max-width: 70%;
 }
+
+.mb-3 {
+    margin: 0 !important;
+}
+
+.form-control-sm-foo {
+    ::placeholder {
+        display: outside;
+    }
+}
+
+textarea.form-control-sm {
+    height: auto; /* Ajusta automáticamente según el contenido */
+    max-height: 50px; /* Establece una altura máxima */
+    min-height: 50px; /* Establece una altura mínima */
+    resize: vertical; /* Permite al usuario redimensionar verticalmente */
+}
+
 /* 
 @media (max-width: 768px) {
     .left-panel {

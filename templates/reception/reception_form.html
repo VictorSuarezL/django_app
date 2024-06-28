@@ -1,16 +1,16 @@
-{% extends 'sales/base.html' %}
+{% extends 'home.html' %}
 {% load django_bootstrap5 %}
 {% load static %}
 
 {% block left %}
-<h1>{% if car_id %}Edit Sale{% else %}Add Sale{% endif %}</h1>
+<h1>{% if car_id %}{{ car }}{% else %}Añadir Nueva{% endif %}</h1>
 <form method="post" class="row row-cols-2 form-control-sm">
     {% csrf_token %}
     {% bootstrap_form form size='sm' layout='horizontal' class='custom-label custom-input' %}
     {% if car_id %}
-        <button type="submit" class="btn btn-warning">Edit</button>
+    <button type="submit" class="btn btn-warning">Edit</button>
     {% else %}
-        <button type="submit" class="btn btn-primary">Add</button>
+    <button type="submit" class="btn btn-primary">Add</button>
     {% endif %}
 </form>
 <h2>Cars</h2>
@@ -24,13 +24,21 @@ Number of cars: {{ cars|length }}
 
 {% block right %}
 <h1>Búsqueda de Coches</h1>
-    <form class="row row-cols-sm-auto g-3 align-items-center form-control-sm" method="get">
-        {% bootstrap_field search_form.matricula layout='inline' size='sm' %}
-        {% bootstrap_field search_form.chasis layout='inline' size='sm' %}
-        {% bootstrap_field search_form.f_matriculacion layout='inline' size='sm' %}
-        {% bootstrap_button button_type="submit" content="Buscar" %}
-        {% bootstrap_button button_type="reset" class="btn btn-secondary" content="Reset" %}
-    </form>
+<form class="row row-cols-sm-auto g-3 align-items-center form-control-sm" method="get">
+    {% bootstrap_field search_form.matricula layout='inline' size='sm' %}
+    {% bootstrap_field search_form.chasis layout='inline' size='sm' %}
+    {% bootstrap_field search_form.f_matriculacion layout='inline' size='sm' %}
+    {% bootstrap_field search_form.stock layout='inline' size='sm' %}
+    {% bootstrap_button button_type="submit" content="Buscar" %}
+    <!-- {% bootstrap_button button_type="reset" class="btn btn-secondary" content="Reset" %} -->
+    <div>
+        {% if car_id %}
+        <a href="{% url url_show_all_button_detail car_id %}" class="btn btn-secondary">Mostrar Todos</a>
+        {% else %}
+        <a href="{% url url_show_all_button %}" class="btn btn-secondary">Mostrar Todos</a>
+        {% endif %}
+    </div>
+</form>
 
 <div class="row">
     <div class="col">
@@ -48,7 +56,7 @@ Number of cars: {{ cars|length }}
             <tbody>
                 {% for c in cars %}
                 <tr>
-                    <td scope="col"><a href="{% url 'reception_detail' car_id=c.id %}">{{ c.matricula }}</a></td>
+                    <td scope="col"><a href="{% url url_show_all_button_detail car_id=c.id %}">{{ c.matricula }}</a></td>
                     <td scope="col">{{ c.modelo }}</td>
                     <td scope="col">{{ c.marca }}</td>
                     <td scope="col">{{ c.created_at }}</td>
