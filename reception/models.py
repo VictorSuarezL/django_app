@@ -1,12 +1,9 @@
 from django.db import models
 
 
-
-
-
 # Create your models here.
 class Reception(models.Model):
-    car = models.OneToOneField('catalog.Car', on_delete=models.CASCADE, default=None)
+    car = models.OneToOneField("catalog.Car", on_delete=models.CASCADE, default=None)
     f_reception = models.DateTimeField(blank=True, null=True)
     n_recepcion = models.TextField(blank=True, null=True)
     recepcionador = models.CharField(max_length=100, blank=True, null=True)
@@ -26,5 +23,3 @@ class Reception(models.Model):
     proveedor = models.CharField(max_length=100, blank=True, null=True)
     info_transporte = models.TextField(blank=True, null=True)
     nota_transporte = models.TextField(blank=True, null=True)
-    
-    

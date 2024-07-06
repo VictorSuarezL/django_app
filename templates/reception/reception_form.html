@@ -4,11 +4,11 @@
 
 {% block left %}
 <h1>{% if car_id %}{{ car }}{% else %}Añadir Nueva{% endif %}</h1>
-<form method="post" class="row row-cols-2 form-control-sm">
+<form method="post" class="form-control-sm">
     {% csrf_token %}
-    {% bootstrap_form form size='sm' layout='horizontal' class='custom-label custom-input' %}
+    {% bootstrap_form form size='sm' layout='horizontal' %}
     {% if car_id %}
-    <button type="submit" class="btn btn-warning">Edit</button>
+    <button type="submit" class="btn btn-warning btn-container">Edit</button>
     {% else %}
     <button type="submit" class="btn btn-primary">Add</button>
     {% endif %}
@@ -56,7 +56,8 @@ Number of cars: {{ cars|length }}
             <tbody>
                 {% for c in cars %}
                 <tr>
-                    <td scope="col"><a href="{% url url_show_all_button_detail car_id=c.id %}">{{ c.matricula }}</a></td>
+                    <td scope="col"><a href="{% url url_show_all_button_detail car_id=c.id %}">{{ c.matricula }}</a>
+                    </td>
                     <td scope="col">{{ c.modelo }}</td>
                     <td scope="col">{{ c.marca }}</td>
                     <td scope="col">{{ c.created_at }}</td>
